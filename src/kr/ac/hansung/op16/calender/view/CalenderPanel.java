@@ -1,19 +1,12 @@
 package kr.ac.hansung.op16.calender.view;
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.GridLayout;
-import java.awt.Label;
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.xml.crypto.Data;
+
 import java.util.Calendar;
 
-import javax.swing.JTable;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-
-public class CalenderPanel extends Panel {
+public class CalenderPanel extends Panel {	
 	JFrame superFrame;
 	Button prevMonthBtn = new Button("<");
 	Button nextMonthBtn = new Button(">");
@@ -86,6 +79,14 @@ public class CalenderPanel extends Panel {
 		for(int i=0; i<dayButton.length; i++){
 			dayButton[i] = new Button("" + (i+1));
 			add(dayButton[i]);
+			dayButton[i].addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					 superFrame.setDay(Integer.parseInt(e.getActionCommand()));
+					 superFrame.calenderRepaint();
+					
+				}
+			});
 		}
 		
 		/* 해당월의 일자를 다 출력한 다음 남는 공간을 채움 */

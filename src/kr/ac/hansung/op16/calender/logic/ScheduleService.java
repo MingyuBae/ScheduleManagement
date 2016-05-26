@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -121,6 +124,17 @@ public class ScheduleService{
 				calendarMappingData.put(day, dayTodoList);
 			}
 		}
+		
+		class ScheduleStartDay implements Comparator<ScheduleData>{
+			@Override
+			public int compare(ScheduleData arg0, ScheduleData arg1){
+				return arg0.getStartDate().compareTo(arg1.getStartDate());
+			}
+		}
+		
+		for(List<ScheduleData> eachScheduleList : calendarMappingData.values()){
+			Collections.sort(eachScheduleList, new ScheduleStartDay());
+		}
 		return calendarMappingData;
 	}
 	
@@ -167,5 +181,6 @@ public class ScheduleService{
 	
 	List<ScheduleData> getScheduleList() {
 		return scheduleList;
-	}	
+	}
+	
 }
