@@ -11,8 +11,7 @@ import org.junit.Test;
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
 public class ScheduleServiceTest {
-	
-	
+
 	/**
 	 * 스케줄 추가기능 테스트 메소드
 	 */
@@ -46,16 +45,13 @@ public class ScheduleServiceTest {
 		
 		scheduleService.addSchedule(2016, 4, 29, 00, 05, 2016, 5, 1, 13, 30, "테스트 일정", "테스트 일정입니다.");
 		
-		Map<Integer, List<ScheduleData>> calendarMapping = scheduleService.calendarMappingScheduleList(2016, 4);
+		assertNull(scheduleService.getDayScheduleList(2016, 4, 1));
+		assertNull(scheduleService.getDayScheduleList(2016, 4, 28));
+		assertNull(scheduleService.getDayScheduleList(2016, 4, 32));
 		
-		
-		assertFalse(calendarMapping.containsKey(1));
-		assertFalse(calendarMapping.containsKey(28));
-		assertFalse(calendarMapping.containsKey(32));
-		
-		assertEquals(calendarMapping.get(29).size(), 1);
-		assertEquals(calendarMapping.get(30).size(), 1);
-		assertEquals(calendarMapping.get(31).size(), 1);
+		assertEquals(scheduleService.getDayScheduleList(2016, 4, 29).size(), 1);
+		assertEquals(scheduleService.getDayScheduleList(2016, 4, 30).size(), 1);
+		assertEquals(scheduleService.getDayScheduleList(2016, 4, 31).size(), 1);
 	}
 
 }

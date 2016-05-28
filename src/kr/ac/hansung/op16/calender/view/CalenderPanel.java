@@ -2,7 +2,6 @@ package kr.ac.hansung.op16.calender.view;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.xml.crypto.Data;
 
 import java.util.Calendar;
 
@@ -15,42 +14,13 @@ public class CalenderPanel extends Panel {
 	Label[] startBlankDay;
 	Button[] dayButton;
 	Label[] lastBlankDay;
-	/**
-	 * Create the panel.
-	 */
+	
 	public CalenderPanel(int year, int month, MainFrame superFrame) {
 		this.superFrame = superFrame;
 		Calendar calendarInfo = Calendar.getInstance();
 		calendarInfo.set(year, month, 1, 0, 0, 0);
 		int firstDayPosition = calendarInfo.get(Calendar.DAY_OF_WEEK);
 		int lastDayOfMonth =  calendarInfo.getActualMaximum(Calendar.DAY_OF_MONTH);
-		
-		setLayout(new GridLayout(8, 7));
-		
-		prevMonthBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calendarInfo.add(Calendar.MONTH, -1);
-				superFrame.setYear(calendarInfo.get(Calendar.YEAR));
-				superFrame.setMonth(calendarInfo.get(Calendar.MONTH));
-				superFrame.calenderRepaint();
-			}
-		});
-		add(prevMonthBtn);
-		add(new Label(""));
-		add(new Label(""+year));
-		add(new Label("년"));
-		add(new Label((month+1)+"월"));
-		add(new Label(""));
-		nextMonthBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calendarInfo.add(Calendar.MONTH, 1);
-				superFrame.setYear(calendarInfo.get(Calendar.YEAR));
-				superFrame.setMonth(calendarInfo.get(Calendar.MONTH));
-				superFrame.calenderRepaint();
-			}
-		});
-		add(nextMonthBtn);
-		
 		
 		/* 요일 표시 */
 		dayOfWeekLabel[0] = new Label("일");
@@ -60,6 +30,36 @@ public class CalenderPanel extends Panel {
 		dayOfWeekLabel[4] = new Label("목");
 		dayOfWeekLabel[5] = new Label("금");
 		dayOfWeekLabel[6] = new Label("토");
+		
+		/* 이벤트 등록 */
+		prevMonthBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calendarInfo.add(Calendar.MONTH, -1);
+				superFrame.setYear(calendarInfo.get(Calendar.YEAR));
+				superFrame.setMonth(calendarInfo.get(Calendar.MONTH));
+				superFrame.calenderRepaint();
+			}
+		});
+		nextMonthBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calendarInfo.add(Calendar.MONTH, 1);
+				superFrame.setYear(calendarInfo.get(Calendar.YEAR));
+				superFrame.setMonth(calendarInfo.get(Calendar.MONTH));
+				superFrame.calenderRepaint();
+			}
+		});
+		
+		setLayout(new GridLayout(8, 7));
+		
+		add(prevMonthBtn);
+		add(new Label(""));
+		add(new Label(""+year));
+		add(new Label("년"));
+		add(new Label((month+1)+"월"));
+		add(new Label(""));
+		
+		add(nextMonthBtn);
+		
 		for(int i=0; i<7; i++)
 			add(dayOfWeekLabel[i]);
 		
@@ -96,5 +96,4 @@ public class CalenderPanel extends Panel {
 			add(lastBlankDay[i]);
 		}
 	}
-
 }

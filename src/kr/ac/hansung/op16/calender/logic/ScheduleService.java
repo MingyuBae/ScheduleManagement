@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -16,14 +15,30 @@ import java.util.Map;
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
 public class ScheduleService{
+	private static ScheduleService instance = null;
+	
+	private int mappingTargetYear, mappingTargetMonth;
 	private String fileName = "calender.dat";
 	private List<ScheduleData> scheduleList = new LinkedList<>();
+	private Map<Integer, List<ScheduleData>> calenderMappingScheduleList;
 	
 	public ScheduleService(){
 		this("calender.dat");
 	}
 	public ScheduleService(String fileName){
 		this.fileName = fileName;
+	}
+	
+	/**
+	 * 싱글톤 패턴으로 일정관리 서비스를 사용하기 위해
+	 * 하나의 인스턴스를 생성/가져오는 메소드
+	 * @return
+	 */
+	public static ScheduleService getInstence(){
+		if(instance == null){
+			instance = new ScheduleService();
+		}
+		return instance;
 	}
 	
 	/**
@@ -68,12 +83,28 @@ public class ScheduleService{
 	}
 	
 	/**
+	 * 해당일의 일정 목록을 반환하는 메소드
+	 * @param year
+	 * @param month
+	 * @param day
+	 * @return 해당일의 일정 목록 (null시 없음)
+	 */
+	public List<ScheduleData> getDayScheduleList(int year, int month, int day){
+		if(mappingTargetYear != year || mappingTargetMonth != month){
+			mappingTargetYear = year;
+			mappingTargetMonth = month;
+			calenderMappingScheduleList = calendarMappingScheduleList(year, month);
+		}
+		return calenderMappingScheduleList.get(day);
+	}
+	
+	/**
 	 * 스케줄 리스트와 달력의 각 날짜를 연결
 	 * @param year 연결시킬 달력의 년도
 	 * @param month 연결시킬 달력의 월
 	 * @return 맵핑 결과
 	 */
-	public Map<Integer, List<ScheduleData>> calendarMappingScheduleList(int year, int month){
+	private Map<Integer, List<ScheduleData>> calendarMappingScheduleList(int year, int month){
 		Map<Integer, List<ScheduleData>> calendarMappingData = new HashMap<>();
 		
 		for(int i=0; i<scheduleList.size(); i++){
@@ -95,45 +126,49 @@ public class ScheduleService{
 		
 		if(startDate.get(Calendar.YEAR) <= year && (startDate.get(Calendar.MONTH)) <= month
 				&& endDate.get(Calendar.YEAR) >= year && (endDate.get(Calendar.MONTH)) >= month){
-			int startDay, endDay;
+			int startDay, endDay;		//맵핑될 일정의 시작일, 종료일을 저장하는 변수
 			
 			if(startDate.get(Calendar.YEAR) == year && startDate.get(Calendar.MONTH) == month){
+				/* 일정 시작일이 해당하는 달에 있다면 */
 				startDay = startDate.get(Calendar.DAY_OF_MONTH);
 			} else {
+				/* 일정 시작일이 해당하는 달에 있지 않을 경우 1일부터  */
 				startDay = 1;
 			}
 			
 			if(endDate.get(Calendar.YEAR) == year && endDate.get(Calendar.MONTH) == month){
+				/* 일정 종료일이 해당하는 달에 있다면 */
 				endDay = endDate.get(Calendar.DAY_OF_MONTH);
 			} else {
+				/* 일정 종료일이 해당하는 달에 있지 않을 경우   */
 				Calendar tempMonthCalender =  Calendar.getInstance();
 				tempMonthCalender.set(year, month, 1);
 				endDay = tempMonthCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
 			}
 			
 			for(int day=startDay; day<=endDay; day++){
+				/* 일정 시작일과 종료일 사이를 맵핑시킴 */
 				List<ScheduleData> dayTodoList;
 			
 				if(calendarMappingData.get(day) == null){
-					dayTodoList = new LinkedList<ScheduleData>();
+					/* 해당일에 기존에 등록된 일정이 없다면 */
+					dayTodoList = new LinkedList<ScheduleData>();		// 해당일에 기존에 등록된 일정이 없다면 새로운 리스트 객체 생성
+					calendarMappingData.put(day, dayTodoList);
 				} else {
-					dayTodoList = calendarMappingData.get(day);
+					dayTodoList = calendarMappingData.get(day);			// 해당일에 기존에 등록된 일정이 있다면 기존 리스트 객체를 불러옴
 				}
-				dayTodoList.add(scheduleData);
-				
-				calendarMappingData.put(day, dayTodoList);
-			}
-		}
-		
-		class ScheduleStartDay implements Comparator<ScheduleData>{
-			@Override
-			public int compare(ScheduleData arg0, ScheduleData arg1){
-				return arg0.getStartDate().compareTo(arg1.getStartDate());
+				dayTodoList.add(scheduleData);				
 			}
 		}
 		
 		for(List<ScheduleData> eachScheduleList : calendarMappingData.values()){
-			Collections.sort(eachScheduleList, new ScheduleStartDay());
+			/* 일정 리스트를 시작 시간 순서로 정렬 */
+			Collections.sort(eachScheduleList, new Comparator<ScheduleData>() {
+				@Override
+				public int compare(ScheduleData arg0, ScheduleData arg1){
+					return arg0.getStartDate().compareTo(arg1.getStartDate());
+				}
+			});
 		}
 		return calendarMappingData;
 	}
@@ -168,6 +203,7 @@ public class ScheduleService{
 	 */
 	private void addSchedule(ScheduleData todoData){
 		scheduleList.add(todoData);
+		calenderMappingScheduleList = calendarMappingScheduleList(mappingTargetYear, mappingTargetMonth);
 	}
 	
 	/**
@@ -176,10 +212,14 @@ public class ScheduleService{
 	 */
 	public void deleteSchedule(int listIndex){
 		scheduleList.remove(listIndex);
+		calenderMappingScheduleList = calendarMappingScheduleList(mappingTargetYear, mappingTargetMonth);
 	}
 	
 	public boolean deleteSchedule(ScheduleData deleteScheduleData){
-		return scheduleList.remove(deleteScheduleData);
+		boolean isRemove = scheduleList.remove(deleteScheduleData);
+		if(isRemove)
+			calenderMappingScheduleList = calendarMappingScheduleList(mappingTargetYear, mappingTargetMonth);
+		return isRemove;
 	}
 	
 	

@@ -1,10 +1,7 @@
 package kr.ac.hansung.op16.calender.view;
 
-import java.awt.Button;
-import java.awt.Frame;
-import java.awt.Label;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JFrame;
@@ -16,7 +13,7 @@ import kr.ac.hansung.op16.calender.model.ScheduleData;
 public class ScheduleDetailPanel extends JPanel {
 	ScheduleService scheduleService;
 	ScheduleData scheduleData;
-	JFrame superFrame;
+	JFrame thisFrame;
 	
 	Label titleLable;
 	Label startDateLabel;
@@ -26,12 +23,12 @@ public class ScheduleDetailPanel extends JPanel {
 	Button closeBtn;
 	Button deleteScheduleBtn;
 	
-	public ScheduleDetailPanel(ScheduleService scheduleService, ScheduleData scheduleData, JFrame superFrame) {
+	public ScheduleDetailPanel(ScheduleData scheduleData, JFrame thisFrame, JFrame mainFrame) {
 		SimpleDateFormat timeFormat = new SimpleDateFormat("YY-MM-dd HH:mm");
 		
-		this.scheduleService = scheduleService;
+		this.scheduleService = ScheduleService.getInstence();
 		this.scheduleData = scheduleData;
-		this.superFrame = superFrame;
+		this.thisFrame = thisFrame;
 		
 		titleLable = new Label(scheduleData.getTitle());
 		startDateLabel = new Label(timeFormat.format(scheduleData.getStartDate().getTime()));
@@ -42,11 +39,12 @@ public class ScheduleDetailPanel extends JPanel {
 		closeBtn = new Button("닫기");
 		deleteScheduleBtn = new Button("일정 삭제");
 		
+		/* 이벤트 등록 */
 		closeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				superFrame.setVisible(false);
-				superFrame.dispose();
+				thisFrame.setVisible(false);
+				thisFrame.dispose();
 			}
 		});
 		deleteScheduleBtn.addActionListener(new ActionListener() {
@@ -54,8 +52,10 @@ public class ScheduleDetailPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				scheduleService.deleteSchedule(scheduleData);
 				
-				superFrame.setVisible(false);
-				superFrame.dispose();
+				thisFrame.setVisible(false);
+				thisFrame.dispose();
+				
+				mainFrame.repaint();
 			}
 		});
 		

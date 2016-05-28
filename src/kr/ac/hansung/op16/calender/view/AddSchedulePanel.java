@@ -1,16 +1,9 @@
 package kr.ac.hansung.op16.calender.view;
 
-import java.awt.Button;
-import java.awt.Choice;
-import java.awt.Frame;
-import java.awt.Label;
-import java.awt.TextArea;
-import java.awt.TextField;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 
@@ -32,27 +25,16 @@ public class AddSchedulePanel extends JPanel {
 	Button submitBtn = new Button("추가");
 	Button cancelBtn = new Button("취소");
 	
-//	Label startTimeHouls
-	/**
-	 * Create the panel.
-	 */
-	public AddSchedulePanel(int year, int month, int day, ScheduleService scheduleService, JFrame superFrame) {
+	public AddSchedulePanel(int year, int month, int day, JFrame thisFrame, JFrame mainFrame) {
+		ScheduleService scheduleService = ScheduleService.getInstence();
+		
 		selectedDateLable = new Label("" + year + "년 " + month + "월 " + day + "일");
-		for(int i=0; i<24; i++){
-			startHourChoice.add("" + i);
-			endHourChoice.add("" + i);
-		}
 		
-		for(int i=0; i<=60; i+=5){
-			startMinuteChoice.add("" + i);
-			endMinuteChoice.add("" + i);
-		}
-		
+		/* 이벤트 등록 */
 		submitBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO 입력값 확인 필요
-				
 				String title = titleField.getText();
 				int startHour = Integer.parseInt(startHourChoice.getSelectedItem());
 				int startMinute = Integer.parseInt(startMinuteChoice.getSelectedItem());
@@ -62,18 +44,29 @@ public class AddSchedulePanel extends JPanel {
 				
 				scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, title, content);
 				
-				superFrame.setVisible(false);
-				superFrame.dispose();
+				thisFrame.setVisible(false);
+				thisFrame.dispose();
+				
+				mainFrame.repaint();
 			}
 		});
-		
 		cancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				superFrame.setVisible(false);
-				superFrame.dispose();				
+				thisFrame.setVisible(false);
+				thisFrame.dispose();
 			}
 		});
+		
+		for(int i=0; i<24; i++){
+			startHourChoice.add("" + i);
+			endHourChoice.add("" + i);
+		}
+		
+		for(int i=0; i<=60; i+=5){
+			startMinuteChoice.add("" + i);
+			endMinuteChoice.add("" + i);
+		}
 		
 		add(selectedDateLable);
 		add(titleLable);
