@@ -178,6 +178,10 @@ public class ScheduleService{
 		scheduleList.remove(listIndex);
 	}
 	
+	public boolean deleteSchedule(ScheduleData deleteScheduleData){
+		return scheduleList.remove(deleteScheduleData);
+	}
+	
 	
 	List<ScheduleData> getScheduleList() {
 		return scheduleList;

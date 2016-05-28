@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 
 public class AddSchedulePanel extends JPanel {
+	Label selectedDateLable;
 	Label titleLable = new Label("제목");
 	TextField titleField = new TextField("title");
 	
@@ -36,6 +37,7 @@ public class AddSchedulePanel extends JPanel {
 	 * Create the panel.
 	 */
 	public AddSchedulePanel(int year, int month, int day, ScheduleService scheduleService, JFrame superFrame) {
+		selectedDateLable = new Label("" + year + "년 " + month + "월 " + day + "일");
 		for(int i=0; i<24; i++){
 			startHourChoice.add("" + i);
 			endHourChoice.add("" + i);
@@ -65,6 +67,15 @@ public class AddSchedulePanel extends JPanel {
 			}
 		});
 		
+		cancelBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				superFrame.setVisible(false);
+				superFrame.dispose();				
+			}
+		});
+		
+		add(selectedDateLable);
 		add(titleLable);
 		add(titleField);
 		

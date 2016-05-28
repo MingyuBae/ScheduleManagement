@@ -8,6 +8,8 @@ import java.awt.List;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
@@ -20,6 +22,8 @@ import kr.ac.hansung.op16.calender.model.ScheduleData;
 
 
 public class ScheduleListPanel extends Panel {
+	java.util.List<ScheduleData> dayScheduleList;
+	
 	MainFrame mainFrame;
 	Panel topPanel;
 	Panel bottomPanel;
@@ -34,7 +38,7 @@ public class ScheduleListPanel extends Panel {
 	public ScheduleListPanel(Map<Integer, java.util.List<ScheduleData>> calenderMappingScheduleList, 
 							ScheduleService scheduleService, MainFrame mainframe, int year, int month, int day) {
 		this.mainFrame = mainframe;
-		java.util.List<ScheduleData> dayScheduleList = calenderMappingScheduleList.get(day);
+		dayScheduleList = calenderMappingScheduleList.get(day);
 		int scheduleListSize = dayScheduleList == null ? 0: dayScheduleList.size();
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		
@@ -48,6 +52,17 @@ public class ScheduleListPanel extends Panel {
 		}
 		
 		selectDateLabel = new Label(year + "년 " + (month+1) + "월 " + day + "일");
+		
+		scheduleList.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame detailScheduleFormFrame = new JFrame();
+				detailScheduleFormFrame.add(new ScheduleDetailPanel(scheduleService, dayScheduleList.get(scheduleList.getSelectedIndex()), detailScheduleFormFrame));
+				detailScheduleFormFrame.pack();
+				detailScheduleFormFrame.setVisible(true);
+				detailScheduleFormFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			}
+		});
 		
 		addScheduleBtn.addActionListener(new ActionListener() {
 			@Override
