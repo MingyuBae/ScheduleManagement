@@ -51,7 +51,7 @@ public class MainFrame extends JFrame {
 		scheduleService.addSchedule(year, month, day, 00, 05, 13, 30, "테스트 일정", "테스트 일정입니다.");
 		calenderMappingScheduleList = scheduleService.calendarMappingScheduleList(year, month);
 		
-		scheludeListPanel = new ScheduleListPanel(calenderMappingScheduleList, this, year, month, day);
+		scheludeListPanel = new ScheduleListPanel(calenderMappingScheduleList, scheduleService, this, year, month, day);
 		add(calenderPanel);
 		add(scheludeListPanel);
 //		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
 	
 	public void calenderRepaint(){
 		calenderPanel = new CalenderPanel(year, month, this);
-		scheludeListPanel = new ScheduleListPanel(calenderMappingScheduleList, this, year, month, day);
+		scheludeListPanel = new ScheduleListPanel(calenderMappingScheduleList, scheduleService, this, year, month, day);
 		
 		getContentPane().removeAll();
 		getContentPane().add(calenderPanel);
@@ -74,9 +74,11 @@ public class MainFrame extends JFrame {
 	
 	public void setYear(int year) {
 		this.year = year;
+		calenderMappingScheduleList = scheduleService.calendarMappingScheduleList(year, month);
 	}
 	public void setMonth(int month) {
 		this.month = month;
+		calenderMappingScheduleList = scheduleService.calendarMappingScheduleList(year, month);
 	}
 	public void setDay(int day) {
 		this.day = day;
