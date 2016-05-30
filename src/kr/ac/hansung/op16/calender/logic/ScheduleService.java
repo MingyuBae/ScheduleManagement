@@ -79,6 +79,9 @@ public class ScheduleService{
 			System.out.println(e.getMessage());
 			return false;
 		}
+		
+		calenderMappingScheduleList = calendarMappingScheduleList(mappingTargetYear, mappingTargetMonth);
+		
 		return true;
 	}
 	
@@ -223,8 +226,15 @@ public class ScheduleService{
 	}
 	
 	
-	List<ScheduleData> getScheduleList() {
+	public List<ScheduleData> getScheduleList() {
 		return scheduleList;
+	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
 }

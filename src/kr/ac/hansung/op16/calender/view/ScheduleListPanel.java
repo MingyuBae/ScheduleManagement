@@ -68,8 +68,6 @@ public class ScheduleListPanel extends Panel {
 		add(selectDateLabel, BorderLayout.NORTH);
 		add(scheduleList, BorderLayout.CENTER);
 		add(addScheduleBtn, BorderLayout.SOUTH);
-		
-		
 	}
 
 }

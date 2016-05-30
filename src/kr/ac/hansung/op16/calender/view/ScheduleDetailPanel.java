@@ -55,7 +55,7 @@ public class ScheduleDetailPanel extends JPanel {
 				thisFrame.setVisible(false);
 				thisFrame.dispose();
 				
-				mainFrame.repaint();
+				mainFrame.revalidate();
 			}
 		});
 		

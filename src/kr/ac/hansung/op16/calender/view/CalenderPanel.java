@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.util.Calendar;
 
 public class CalenderPanel extends Panel {	
-	JFrame superFrame;
 	Button prevMonthBtn = new Button("<");
 	Button nextMonthBtn = new Button(">");
 	
@@ -16,7 +15,6 @@ public class CalenderPanel extends Panel {
 	Label[] lastBlankDay;
 	
 	public CalenderPanel(int year, int month, MainFrame superFrame) {
-		this.superFrame = superFrame;
 		Calendar calendarInfo = Calendar.getInstance();
 		calendarInfo.set(year, month, 1, 0, 0, 0);
 		int firstDayPosition = calendarInfo.get(Calendar.DAY_OF_WEEK);
@@ -84,7 +82,6 @@ public class CalenderPanel extends Panel {
 				public void actionPerformed(ActionEvent e) {
 					 superFrame.setDay(Integer.parseInt(e.getActionCommand()));
 					 superFrame.calenderRepaint();
-					
 				}
 			});
 		}

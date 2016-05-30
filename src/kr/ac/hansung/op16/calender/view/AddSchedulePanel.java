@@ -47,7 +47,7 @@ public class AddSchedulePanel extends JPanel {
 				thisFrame.setVisible(false);
 				thisFrame.dispose();
 				
-				mainFrame.repaint();
+				mainFrame.revalidate();
 			}
 		});
 		cancelBtn.addActionListener(new ActionListener() {
