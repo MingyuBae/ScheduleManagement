@@ -34,6 +34,7 @@ public class ScheduleDetailPanel extends JPanel {
 		
 		titleLable = new Label(scheduleData.getTitle());
 		startDateLabel = new Label(starttimeFormat.format(scheduleData.getStartDate().getTime()));
+		timeLabel = new Label();
 		endDateLabel = new Label(endtimeFormat.format(scheduleData.getEndDate().getTime()));
 		
 		contentLabel = new Label(scheduleData.getContent());
