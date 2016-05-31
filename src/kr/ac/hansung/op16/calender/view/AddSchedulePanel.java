@@ -8,6 +8,18 @@ import javax.swing.*;
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 
 public class AddSchedulePanel extends JPanel {
+
+	JPanel panel1 = new JPanel();
+	JPanel panel2 = new JPanel();
+	JPanel panel3 = new JPanel();
+	/*
+	 * 알람추가시 활성화
+	JPanel panel4 = new JPanel();
+	*/
+	JPanel panel5 = new JPanel();
+	JPanel panel6 = new JPanel();
+	
+	
 	Label selectedDateLable;
 	Label titleLable = new Label("제목");
 	TextField titleField = new TextField("title");
@@ -30,6 +42,8 @@ public class AddSchedulePanel extends JPanel {
 		ScheduleService scheduleService = ScheduleService.getInstence();
 		
 		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
+		
+		thisFrame.setLayout(new GridLayout(6,1));
 		
 		/* 이벤트 등록 */
 		submitBtn.addActionListener(new ActionListener() {
@@ -68,22 +82,39 @@ public class AddSchedulePanel extends JPanel {
 			startMinuteChoice.add("" + i);
 			endMinuteChoice.add("" + i);
 		}
+
 		
-		add(selectedDateLable);
-		add(titleLable);
-		add(titleField);
+		panel1.add(selectedDateLable);
 		
-		add(dateLabel);
-		add(startHourChoice);
-		add(startMinuteChoice);
-		add(timeLabel);
-		add(endHourChoice);
-		add(endMinuteChoice);
+		panel2.add(titleLable);
+		panel2.add(titleField);
 		
-		add(contentArea);
+		panel3.add(dateLabel);
+		panel3.add(startHourChoice);
+		panel3.add(startMinuteChoice);
+		panel3.add(timeLabel);
+		panel3.add(endHourChoice);
+		panel3.add(endMinuteChoice);
 		
-		add(submitBtn);
-		add(cancelBtn);
+		panel5.setLayout(new FlowLayout());
+		panel5.add(contentLable);
+		panel5.add(contentArea);
+		
+		panel6.setLayout(new FlowLayout());
+		panel6.add(submitBtn);
+		panel6.add(cancelBtn);
+		
+		thisFrame.add(panel1);
+		thisFrame.add(panel2);
+		thisFrame.add(panel3);
+		thisFrame.add(panel5);
+		thisFrame.add(panel6);
+		
+		thisFrame.setTitle("일정 추가");
+		thisFrame.setSize(500,500);
+		thisFrame.setVisible(true);
+
+		
 	}
 
 }
