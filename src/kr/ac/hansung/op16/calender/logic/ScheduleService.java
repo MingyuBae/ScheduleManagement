@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
@@ -21,6 +22,7 @@ public class ScheduleService{
 	private String fileName = "calender.dat";
 	private List<ScheduleData> scheduleList = new LinkedList<>();
 	private Map<Integer, List<ScheduleData>> calenderMappingScheduleList;
+	Timer scheduleAlertTimer = new Timer();
 	
 	public ScheduleService(){
 		this("calender.dat");
@@ -83,6 +85,25 @@ public class ScheduleService{
 		calenderMappingScheduleList = calendarMappingScheduleList(mappingTargetYear, mappingTargetMonth);
 		
 		return true;
+	}
+	
+	public void scheduleAlertSet(){
+		Calendar nowDate = Calendar.getInstance();
+		scheduleAlertTimer.cancel();
+		
+		for(ScheduleData scheduleEach : scheduleList){
+			if(scheduleEach.getAlertTimeSec() >= 0){
+				Calendar tempStartTime = (Calendar) scheduleEach.getStartDate().clone();
+				tempStartTime.add(Calendar.SECOND, scheduleEach.getAlertTimeSec());
+				
+				if(nowDate.getTimeInMillis() < tempStartTime.getTimeInMillis()){
+					scheduleAlertTimer.schedule(new AlertTimer(scheduleEach), tempStartTime.getTime());
+				}
+			}
+		}
+		
+		scheduleAlertTimer.cancel();
+		
 	}
 	
 	/**
@@ -190,14 +211,14 @@ public class ScheduleService{
 	 * @param title 일정명
 	 * @param content 일정 상세 정보
 	 */
-	public void addSchedule(int year, int month, int day, int startHour, int startMinute, int endHour, int endMinute, String title, String content){
-		addSchedule(new ScheduleData(year, month, day, startHour, startMinute, endHour, endMinute, title, content));
+	public void addSchedule(int year, int month, int day, int startHour, int startMinute, int endHour, int endMinute, int alertTime, String title, String content){
+		addSchedule(new ScheduleData(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content));
 	}
 	
 	public void addSchedule(int startYear, int startMonth, int startDay, int startHour, int startMinute, 
-			int endYear, int endMonth, int endDay, int endHour, int endMinute, String title, String content){
+			int endYear, int endMonth, int endDay, int endHour, int endMinute, int alertTime, String title, String content){
 		addSchedule(new ScheduleData(startYear, startMonth, startDay, startHour, startMinute,
-										endYear, endMonth, endDay, endHour, endMinute, title, content));
+										endYear, endMonth, endDay, endHour, endMinute, alertTime, title, content));
 	}
 	
 	/**

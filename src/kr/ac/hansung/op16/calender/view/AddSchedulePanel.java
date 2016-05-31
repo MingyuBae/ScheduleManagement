@@ -10,7 +10,7 @@ import kr.ac.hansung.op16.calender.logic.ScheduleService;
 public class AddSchedulePanel extends JPanel {
 	Label selectedDateLable;
 	Label titleLable = new Label("제목");
-	TextField titleField = new TextField("title");
+	TextField titleField = new TextField();
 	
 	Label dateLabel = new Label("기간");
 	
@@ -18,6 +18,10 @@ public class AddSchedulePanel extends JPanel {
 	Choice startMinuteChoice = new Choice();
 	Choice endHourChoice = new Choice();
 	Choice endMinuteChoice = new Choice();
+	
+	TextField alertTimeFied = new TextField();
+	Choice alertUnitChoice = new Choice();
+	Checkbox alertEnableCheckbox = new Checkbox("알람");
 	
 	Label contentLable = new Label("상세내용");
 	TextArea contentArea = new TextArea();
@@ -41,12 +45,27 @@ public class AddSchedulePanel extends JPanel {
 				int endHour = Integer.parseInt(endHourChoice.getSelectedItem());
 				int endMinute = Integer.parseInt(endMinuteChoice.getSelectedItem());
 				String content = contentArea.getText();
+				int alertTime = -1;
 				
-				scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, title, content);
+				
+				if(alertEnableCheckbox.getState()){
+					String selectedUnit = alertUnitChoice.getSelectedItem();
+					if("시간".equals(selectedUnit)){
+						alertTime = Integer.parseInt(alertTimeFied.getText()) * 60 * 60;
+					} else if("분".equals(selectedUnit)){
+						alertTime = Integer.parseInt(alertTimeFied.getText()) * 60;
+					} else {
+						alertTime = Integer.parseInt(alertTimeFied.getText());
+					}
+				}
+				
+				scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
 				
 				thisFrame.setVisible(false);
 				thisFrame.dispose();
 				
+				scheduleService.scheduleAlertSet();
+				((MainFrame)mainFrame).calenderRepaint();
 				mainFrame.revalidate();
 			}
 		});
@@ -68,6 +87,9 @@ public class AddSchedulePanel extends JPanel {
 			endMinuteChoice.add("" + i);
 		}
 		
+		alertUnitChoice.add("분");
+		alertUnitChoice.add("시간");
+		
 		add(selectedDateLable);
 		add(titleLable);
 		add(titleField);
@@ -77,6 +99,10 @@ public class AddSchedulePanel extends JPanel {
 		add(startMinuteChoice);
 		add(endHourChoice);
 		add(endMinuteChoice);
+		
+		add(alertEnableCheckbox);
+		add(alertTimeFied);
+		add(alertUnitChoice);
 		
 		add(contentArea);
 		

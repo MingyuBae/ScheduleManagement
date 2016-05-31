@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
@@ -19,7 +18,7 @@ public class ScheduleServiceTest {
 	public void testOneAddSchedule(){
 		ScheduleService scheduleService = new ScheduleService();
 		
-		scheduleService.addSchedule(2016, 4, 25, 00, 05, 13, 30, "테스트 일정", "테스트 일정입니다.");
+		scheduleService.addSchedule(2016, 4, 25, 00, 05, 13, 30, -1, "테스트 일정", "테스트 일정입니다.");
 		
 		List<ScheduleData> scheduleList = scheduleService.getScheduleList();
 		assertEquals(scheduleList.size(), 1);
@@ -43,7 +42,7 @@ public class ScheduleServiceTest {
 	public void testCalenderMapping(){
 		ScheduleService scheduleService = new ScheduleService();
 		
-		scheduleService.addSchedule(2016, 4, 29, 00, 05, 2016, 5, 1, 13, 30, "테스트 일정", "테스트 일정입니다.");
+		scheduleService.addSchedule(2016, 4, 29, 00, 05, 2016, 5, 1, 13, 30, -1, "테스트 일정", "테스트 일정입니다.");
 		
 		assertNull(scheduleService.getDayScheduleList(2016, 4, 1));
 		assertNull(scheduleService.getDayScheduleList(2016, 4, 28));

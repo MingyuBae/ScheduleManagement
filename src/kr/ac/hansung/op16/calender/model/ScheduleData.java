@@ -7,13 +7,15 @@ public class ScheduleData implements Serializable{
 	Calendar endDate;
 	String title;
 	String content;
+	int alertTimeSec;
+	boolean alertCheck;
 	
-	public ScheduleData(int year, int month, int day, int startHour, int startMinute, int endHour, int endMinute, String title, String content){
-		this(year, month, day, startHour, startMinute, year, month, day, endHour, endMinute, title, content);
+	public ScheduleData(int year, int month, int day, int startHour, int startMinute, int endHour, int endMinute, int alertTimeSec, String title, String content){
+		this(year, month, day, startHour, startMinute, year, month, day, endHour, endMinute, alertTimeSec, title, content);
 	}
 	
 	public ScheduleData(int startYear, int startMonth, int startDay, int startHour, int startMinute,
-						int endYear, int endMonth, int endDay, int endHour, int endMinute, String title, String content){
+						int endYear, int endMonth, int endDay, int endHour, int endMinute, int alertTimeSec, String title, String content){
 		this.startDate = Calendar.getInstance();
 		this.startDate.set(startYear, startMonth, startDay, startHour, startMinute);
 		
@@ -22,6 +24,8 @@ public class ScheduleData implements Serializable{
 		
 		this.title = title;
 		this.content = content;
+		this.alertTimeSec = alertTimeSec;
+		this.alertCheck = false;
 	}
 
 	public Calendar getStartDate() {
@@ -47,5 +51,11 @@ public class ScheduleData implements Serializable{
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public int getAlertTimeSec() {
+		return alertTimeSec;
+	}
+	public void setAlertTimeSec(int alertTimeSec) {
+		this.alertTimeSec = alertTimeSec;
 	}
 }
