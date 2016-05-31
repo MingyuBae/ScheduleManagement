@@ -17,6 +17,7 @@ public class ScheduleDetailPanel extends JPanel {
 	
 	Label titleLable;
 	Label startDateLabel;
+	Label timeLabel;
 	Label endDateLabel;
 	Label contentLabel;
 	
@@ -24,22 +25,23 @@ public class ScheduleDetailPanel extends JPanel {
 	Button deleteScheduleBtn;
 	
 	public ScheduleDetailPanel(ScheduleData scheduleData, JFrame thisFrame, JFrame mainFrame) {
-		SimpleDateFormat timeFormat = new SimpleDateFormat("YY-MM-dd HH:mm");
+		SimpleDateFormat starttimeFormat = new SimpleDateFormat("YY-MM-dd HH:mm");
+		SimpleDateFormat endtimeFormat = new SimpleDateFormat("HH:mm");
 		
 		this.scheduleService = ScheduleService.getInstence();
 		this.scheduleData = scheduleData;
 		this.thisFrame = thisFrame;
 		
 		titleLable = new Label(scheduleData.getTitle());
-		startDateLabel = new Label(timeFormat.format(scheduleData.getStartDate().getTime()));
-		endDateLabel = new Label(timeFormat.format(scheduleData.getEndDate().getTime()));
+		startDateLabel = new Label(starttimeFormat.format(scheduleData.getStartDate().getTime()));
+		endDateLabel = new Label(endtimeFormat.format(scheduleData.getEndDate().getTime()));
 		
 		contentLabel = new Label(scheduleData.getContent());
 				
-		closeBtn = new Button("닫기");
-		deleteScheduleBtn = new Button("일정 삭제");
+		closeBtn = new Button("�떕湲�");
+		deleteScheduleBtn = new Button("�씪�젙 �궘�젣");
 		
-		/* 이벤트 등록 */
+		/* �씠踰ㅽ듃 �벑濡� */
 		closeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -61,6 +63,7 @@ public class ScheduleDetailPanel extends JPanel {
 		
 		add(titleLable);
 		add(startDateLabel);
+		add(timeLabel);
 		add(endDateLabel);
 		add(contentLabel);
 		add(closeBtn);
