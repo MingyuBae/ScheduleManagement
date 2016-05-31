@@ -39,10 +39,10 @@ public class ScheduleDetailPanel extends JPanel {
 		
 		contentLabel = new Label(scheduleData.getContent());
 				
-		closeBtn = new Button("�떕湲�");
-		deleteScheduleBtn = new Button("�씪�젙 �궘�젣");
+		closeBtn = new Button("닫기");
+		deleteScheduleBtn = new Button("일정 삭제");
 		
-		/* �씠踰ㅽ듃 �벑濡� */
+		/* 이벤트등록 */
 		closeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

@@ -9,10 +9,10 @@ import kr.ac.hansung.op16.calender.logic.ScheduleService;
 
 public class AddSchedulePanel extends JPanel {
 	Label selectedDateLable;
-	Label titleLable = new Label("�젣紐�");
+	Label titleLable = new Label("제목");
 	TextField titleField = new TextField("title");
 	
-	Label dateLabel = new Label("湲곌컙");
+	Label dateLabel = new Label("기간");
 	
 	Choice startHourChoice = new Choice();
 	Choice startMinuteChoice = new Choice();
@@ -20,22 +20,22 @@ public class AddSchedulePanel extends JPanel {
 	Choice endHourChoice = new Choice();
 	Choice endMinuteChoice = new Choice();
 	
-	Label contentLable = new Label("�긽�꽭�궡�슜");
+	Label contentLable = new Label("상세내용");
 	TextArea contentArea = new TextArea();
 	
-	Button submitBtn = new Button("異붽�");
-	Button cancelBtn = new Button("痍⑥냼");
+	Button submitBtn = new Button("추가");
+	Button cancelBtn = new Button("취소");
 	
 	public AddSchedulePanel(int year, int month, int day, JFrame thisFrame, JFrame mainFrame) {
 		ScheduleService scheduleService = ScheduleService.getInstence();
 		
-		selectedDateLable = new Label("" + year + "�뀈 " + (month+1) + "�썡 " + day + "�씪");
+		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
 		
-		/* �씠踰ㅽ듃 �벑濡� */
+		/* 이벤트 등록 */
 		submitBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO �엯�젰媛� �솗�씤 �븘�슂
+				// TODO 입력값 확인 필요
 				String title = titleField.getText();
 				int startHour = Integer.parseInt(startHourChoice.getSelectedItem());
 				int startMinute = Integer.parseInt(startMinuteChoice.getSelectedItem());
