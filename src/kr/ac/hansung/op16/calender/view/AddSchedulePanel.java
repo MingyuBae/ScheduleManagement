@@ -16,6 +16,7 @@ public class AddSchedulePanel extends JPanel {
 	
 	Choice startHourChoice = new Choice();
 	Choice startMinuteChoice = new Choice();
+	Label timeLabel = new Label("~");
 	Choice endHourChoice = new Choice();
 	Choice endMinuteChoice = new Choice();
 	
@@ -28,7 +29,7 @@ public class AddSchedulePanel extends JPanel {
 	public AddSchedulePanel(int year, int month, int day, JFrame thisFrame, JFrame mainFrame) {
 		ScheduleService scheduleService = ScheduleService.getInstence();
 		
-		selectedDateLable = new Label("" + year + "년 " + month + "월 " + day + "일");
+		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
 		
 		/* 이벤트 등록 */
 		submitBtn.addActionListener(new ActionListener() {
@@ -75,6 +76,7 @@ public class AddSchedulePanel extends JPanel {
 		add(dateLabel);
 		add(startHourChoice);
 		add(startMinuteChoice);
+		add(timeLabel);
 		add(endHourChoice);
 		add(endMinuteChoice);
 		
