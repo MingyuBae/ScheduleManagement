@@ -95,7 +95,6 @@ public class ScheduleService{
 		for(ScheduleData scheduleEach : scheduleList){
 			if(scheduleEach.getAlertDate() != null){
 				if(nowDate.getTimeInMillis() < scheduleEach.getAlertDate().getTime()){
-					System.out.println(scheduleEach.getAlertDate());
 					scheduleAlertTimer.schedule(new AlertTimer(scheduleEach), scheduleEach.getAlertDate());
 				}
 			}

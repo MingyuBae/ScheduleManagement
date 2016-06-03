@@ -55,9 +55,12 @@ public class ScheduleDetailPanel extends JPanel {
 				thisFrame.setVisible(false);
 				thisFrame.dispose();
 				
-				((MainFrame)mainFrame).calenderRepaint();
+				if(mainFrame instanceof MainFrame){
+					((MainFrame)mainFrame).calenderRepaint();
+				} else if(mainFrame != null){
+					mainFrame.revalidate();					
+				}
 				
-				mainFrame.revalidate();
 			}
 		});
 		
