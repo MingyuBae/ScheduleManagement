@@ -1,14 +1,14 @@
 package kr.ac.hansung.op16.calender.model;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ScheduleData implements Serializable{
 	Calendar startDate;
 	Calendar endDate;
 	String title;
 	String content;
-	int alertTimeSec;
-	boolean alertCheck;
+	Date alertDate;
 	
 	public ScheduleData(int year, int month, int day, int startHour, int startMinute, int endHour, int endMinute, int alertTimeSec, String title, String content){
 		this(year, month, day, startHour, startMinute, year, month, day, endHour, endMinute, alertTimeSec, title, content);
@@ -24,8 +24,10 @@ public class ScheduleData implements Serializable{
 		
 		this.title = title;
 		this.content = content;
-		this.alertTimeSec = alertTimeSec;
-		this.alertCheck = false;
+		
+		if(alertTimeSec >= 0){
+			this.alertDate = new Date(startDate.getTimeInMillis() - (alertTimeSec * 1000));
+		}
 	}
 
 	public Calendar getStartDate() {
@@ -52,10 +54,10 @@ public class ScheduleData implements Serializable{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public int getAlertTimeSec() {
-		return alertTimeSec;
+	public Date getAlertDate() {
+		return alertDate;
 	}
-	public void setAlertTimeSec(int alertTimeSec) {
-		this.alertTimeSec = alertTimeSec;
+	public void setAlertDate(Date alertDate) {
+		this.alertDate = alertDate;
 	}
 }

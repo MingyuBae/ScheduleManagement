@@ -19,9 +19,9 @@ public class AddSchedulePanel extends JPanel {
 	Choice endHourChoice = new Choice();
 	Choice endMinuteChoice = new Choice();
 	
-	TextField alertTimeFied = new TextField();
-	Choice alertUnitChoice = new Choice();
 	Checkbox alertEnableCheckbox = new Checkbox("알람");
+	TextField alertTimeFied = new TextField("5");
+	Choice alertUnitChoice = new Choice();
 	
 	Label contentLable = new Label("상세내용");
 	TextArea contentArea = new TextArea();
@@ -77,6 +77,20 @@ public class AddSchedulePanel extends JPanel {
 			}
 		});
 		
+		alertEnableCheckbox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED){
+					alertTimeFied.setEnabled(true);
+					alertUnitChoice.setEnabled(true);
+				} else {
+					alertTimeFied.setEnabled(false);
+					alertUnitChoice.setEnabled(false);
+				}
+				
+			}
+		});
+		
 		for(int i=0; i<24; i++){
 			startHourChoice.add("" + i);
 			endHourChoice.add("" + i);
@@ -86,9 +100,11 @@ public class AddSchedulePanel extends JPanel {
 			startMinuteChoice.add("" + i);
 			endMinuteChoice.add("" + i);
 		}
+		alertEnableCheckbox.setState(true);
 		
 		alertUnitChoice.add("분");
 		alertUnitChoice.add("시간");
+		alertUnitChoice.select(0);
 		
 		add(selectedDateLable);
 		add(titleLable);

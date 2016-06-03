@@ -90,20 +90,16 @@ public class ScheduleService{
 	public void scheduleAlertSet(){
 		Calendar nowDate = Calendar.getInstance();
 		scheduleAlertTimer.cancel();
+		scheduleAlertTimer = new Timer();
 		
 		for(ScheduleData scheduleEach : scheduleList){
-			if(scheduleEach.getAlertTimeSec() >= 0){
-				Calendar tempStartTime = (Calendar) scheduleEach.getStartDate().clone();
-				tempStartTime.add(Calendar.SECOND, scheduleEach.getAlertTimeSec());
-				
-				if(nowDate.getTimeInMillis() < tempStartTime.getTimeInMillis()){
-					scheduleAlertTimer.schedule(new AlertTimer(scheduleEach), tempStartTime.getTime());
+			if(scheduleEach.getAlertDate() != null){
+				if(nowDate.getTimeInMillis() < scheduleEach.getAlertDate().getTime()){
+					System.out.println(scheduleEach.getAlertDate());
+					scheduleAlertTimer.schedule(new AlertTimer(scheduleEach), scheduleEach.getAlertDate());
 				}
 			}
 		}
-		
-		scheduleAlertTimer.cancel();
-		
 	}
 	
 	/**
