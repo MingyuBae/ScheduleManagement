@@ -17,10 +17,10 @@ public class ScheduleData implements Serializable{
 	public ScheduleData(int startYear, int startMonth, int startDay, int startHour, int startMinute,
 						int endYear, int endMonth, int endDay, int endHour, int endMinute, int alertTimeSec, String title, String content){
 		this.startDate = Calendar.getInstance();
-		this.startDate.set(startYear, startMonth, startDay, startHour, startMinute);
+		this.startDate.set(startYear, startMonth, startDay, startHour, startMinute, 00);
 		
 		this.endDate = Calendar.getInstance();
-		this.endDate.set(endYear, endMonth, endDay, endHour, endMinute);
+		this.endDate.set(endYear, endMonth, endDay, endHour, endMinute, 00);
 		
 		this.title = title;
 		this.content = content;
