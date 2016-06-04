@@ -118,6 +118,13 @@ public class ScheduleService{
 	}
 	
 	/**
+	 * 스케줄 맵핑을 강제로 새로고침
+	 */
+	public void calendarMappingRefresh(){
+		calenderMappingScheduleList = calendarMappingScheduleList(mappingTargetYear, mappingTargetMonth);
+	}
+	
+	/**
 	 * 스케줄 리스트와 달력의 각 날짜를 연결
 	 * @param year 연결시킬 달력의 년도
 	 * @param month 연결시킬 달력의 월
@@ -192,7 +199,36 @@ public class ScheduleService{
 		return calendarMappingData;
 	}
 	
-	
+	/**
+	 * 스케줄 리스트를 추가하는 메소드
+	 * api를 통해 가져온 정보가 중복 저장되지 않게 하기 위해 id가 중복된 값은 추가하지 않음
+	 * @param addScheduleList
+	 */
+	public int addScheduleList(List<ScheduleData> addScheduleList){
+		int addScheduleCount = 0;
+		
+		for(ScheduleData addScheduleEach : addScheduleList){
+			boolean scheduleOverlap = false;
+			
+			if(addScheduleEach.isExternalSchedule()){
+				for(int j=0; j<scheduleList.size(); j++){
+					ScheduleData scheduleEach = scheduleList.get(j);
+					if(scheduleEach.isExternalSchedule() 
+							&& addScheduleEach.getId().equals(scheduleEach.getId())){
+						scheduleOverlap = true;
+						scheduleList.set(j, addScheduleEach);
+						break;
+					}
+				}
+			}
+			
+			if(! scheduleOverlap){
+				scheduleList.add(addScheduleEach);
+				addScheduleCount ++;
+			}
+		}
+		return addScheduleCount;
+	}
 	
 	/**
 	 * 스케줄 리스트에 일정을 추가시키는 메소드

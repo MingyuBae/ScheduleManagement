@@ -4,11 +4,23 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ScheduleData implements Serializable{
+	String id;
 	Calendar startDate;
 	Calendar endDate;
 	String title;
 	String content;
 	Date alertDate;
+	boolean externalSchedule;
+	
+	public ScheduleData(String id, Calendar startDate, Calendar endDate, String title, String content, Date alertDate, boolean externalSchedule){
+		this.id = id;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.title = title;
+		this.content = content;
+		this.alertDate = alertDate;
+		this.externalSchedule = externalSchedule;
+	}
 	
 	public ScheduleData(int year, int month, int day, int startHour, int startMinute, int endHour, int endMinute, int alertTimeSec, String title, String content){
 		this(year, month, day, startHour, startMinute, year, month, day, endHour, endMinute, alertTimeSec, title, content);
@@ -24,6 +36,8 @@ public class ScheduleData implements Serializable{
 		
 		this.title = title;
 		this.content = content;
+		
+		externalSchedule = false;
 		
 		if(alertTimeSec >= 0){
 			this.alertDate = new Date(startDate.getTimeInMillis() - (alertTimeSec * 1000));
@@ -59,5 +73,17 @@ public class ScheduleData implements Serializable{
 	}
 	public void setAlertDate(Date alertDate) {
 		this.alertDate = alertDate;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public boolean isExternalSchedule() {
+		return externalSchedule;
+	}
+	public void setExternalSchedule(boolean externalSchedule) {
+		this.externalSchedule = externalSchedule;
 	}
 }
