@@ -27,6 +27,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GoogleCalendarApiService {
+	private static final String CALENDAR_EVENT_SCHEDULE = "primary";
+	private static final String CALENDAR_EVENT_HOLIDAY = "ko.south_korea#holiday@group.v.calendar.google.com";
+	private static final String CALENDAR_EVENT_HANSUNGUNIV = "hansunginfoteam@gmail.com";
+	
 	/** Application name. */
 	private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
 
@@ -92,10 +96,35 @@ public class GoogleCalendarApiService {
 				.setApplicationName(APPLICATION_NAME).build();
 	}
 	
-	
+	/**
+	 * 구글 켈린더에 사용자의 일정을 가져오는 메소드
+	 * @param year
+	 * @param month
+	 * @return
+	 */
 	public List<ScheduleData> getSchedule(int year, int month){
 		List<ScheduleData> scheduleList  = new LinkedList<>();
-		List<Event> eventList = getGoogleCalendarSchedule(year, month);
+		List<Event> eventList = getGoogleCalendarSchedule(CALENDAR_EVENT_SCHEDULE, year, month);
+		
+		if(eventList != null){
+			for(Event eventEach : eventList){
+				scheduleList.add(eventToScheduleData(eventEach));
+			}
+			return scheduleList;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * 구글 캘린더에 대한민국 휴일 정보를 가져오는 메소드
+	 * @param year
+	 * @param month
+	 * @return
+	 */
+	public List<ScheduleData> getHolidayEvent(int year, int month){
+		List<ScheduleData> scheduleList  = new LinkedList<>();
+		List<Event> eventList = getGoogleCalendarSchedule(CALENDAR_EVENT_HOLIDAY, year, month);
 		
 		if(eventList != null){
 			for(Event eventEach : eventList){
@@ -113,7 +142,7 @@ public class GoogleCalendarApiService {
 	 * @param month
 	 * @return
 	 */
-	private List<Event> getGoogleCalendarSchedule(int year, int month) {
+	private List<Event> getGoogleCalendarSchedule(String listName, int year, int month) {
 		try {
 			com.google.api.services.calendar.Calendar service = getCalendarService();
 			
@@ -125,7 +154,7 @@ public class GoogleCalendarApiService {
 			
 			DateTime startTime = new DateTime(monthStartCalendar.getTime());
 			DateTime endTime = new DateTime(monthEndCalendar.getTime());
-			Events events = service.events().list("primary")
+			Events events = service.events().list(listName)
 											.setTimeMin(startTime)
 											.setTimeMax(endTime)
 											.setOrderBy("startTime")
@@ -138,7 +167,7 @@ public class GoogleCalendarApiService {
 			System.err.println("데이터를 가져오는 중 오류가 발생하였습니다");
 		}
 		return null;
-	}	
+	}
 	
 	/**
 	 * google API에서 받은 이벤트를 프로그램 내부에 사용하는 일정 정보로 변환하는 메소드
@@ -146,8 +175,8 @@ public class GoogleCalendarApiService {
 	 * @return
 	 */
 	public ScheduleData eventToScheduleData(Event target){
-		Calendar startDate = dateTimeToCalendar(target.getStart().getDateTime());
-		Calendar endDate = dateTimeToCalendar(target.getEnd().getDateTime());
+		Calendar startDate = eventDateTimeToCalendar(target.getStart(), true);
+		Calendar endDate = eventDateTimeToCalendar(target.getEnd(), false);
 		
 		return new ScheduleData(target.getId(), startDate, endDate, target.getSummary(), target.getDescription(), null, true);
 	}
@@ -157,9 +186,22 @@ public class GoogleCalendarApiService {
 	 * @param target
 	 * @return
 	 */
-	public Calendar dateTimeToCalendar(DateTime target){
+	public Calendar eventDateTimeToCalendar(EventDateTime eventDateTimeTarget, boolean isStart){
 		Calendar returnValue = Calendar.getInstance();
-		returnValue.setTimeInMillis(target.getValue());
+		if(eventDateTimeTarget.getDateTime() == null){
+			returnValue.setTimeInMillis(eventDateTimeTarget.getDate().getValue());
+			if(isStart){
+				returnValue.set(Calendar.HOUR_OF_DAY, 0);
+				returnValue.set(Calendar.MINUTE, 0);
+				returnValue.set(Calendar.SECOND, 0);
+			} else {
+				returnValue.set(Calendar.HOUR_OF_DAY, 23);
+				returnValue.set(Calendar.MINUTE, 59);
+				returnValue.set(Calendar.SECOND, 59);
+			}
+		} else {
+			returnValue.setTimeInMillis(eventDateTimeTarget.getDateTime().getValue());
+		}
 		return returnValue;
 	}
 
