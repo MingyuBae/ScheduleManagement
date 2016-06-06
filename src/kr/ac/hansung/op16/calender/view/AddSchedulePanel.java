@@ -9,14 +9,23 @@ import kr.ac.hansung.op16.calender.logic.ScheduleService;
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
 public class AddSchedulePanel extends JPanel {
+	
+	boolean save = true;
+	JPanel panel1 = new JPanel();
+	JPanel panel2 = new JPanel();
+	JPanel panel3 = new JPanel();
+	JPanel panel4 = new JPanel();
+	JPanel panel5 = new JPanel();
+	JPanel panel6 = new JPanel();
 	Label selectedDateLable;
 	Label titleLable = new Label("제목");
-	TextField titleField = new TextField();
+	TextField titleField = new TextField(20);
 	
 	Label dateLabel = new Label("기간");
 	
 	Choice startHourChoice = new Choice();
 	Choice startMinuteChoice = new Choice();
+	Label timeLabel = new Label("~");
 	Choice endHourChoice = new Choice();
 	Choice endMinuteChoice = new Choice();
 	
@@ -26,7 +35,7 @@ public class AddSchedulePanel extends JPanel {
 	Choice alertUnitChoice = new Choice();
 	
 	Label contentLable = new Label("상세내용");
-	TextArea contentArea = new TextArea();
+	TextArea contentArea = new TextArea(3,30);
 	
 	Button submitBtn = new Button("추가");
 	Button cancelBtn = new Button("취소");
@@ -35,7 +44,10 @@ public class AddSchedulePanel extends JPanel {
 		ScheduleService scheduleService = ScheduleService.getInstence();
 		boolean googleApiEnable = scheduleService.getSettingData().isGoogleApiEnable();
 		
-		selectedDateLable = new Label("" + year + "년 " + month + "월 " + day + "일");
+		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
+		thisFrame.setLayout(new GridLayout(7,1,0,0));
+		thisFrame.setPreferredSize(new Dimension(350,500));
+	    thisFrame.pack();
 		
 		
 		/* 이벤트 등록 */
@@ -51,6 +63,16 @@ public class AddSchedulePanel extends JPanel {
 				String content = contentArea.getText();
 				int alertTime = -1;
 				
+				if(startHour > endHour){
+					JOptionPane.showMessageDialog(new Frame(), "끝나는 시간이 시작 시간보다 빠릅니다.", "시간 입력 오류", JOptionPane.ERROR_MESSAGE);
+					save = false;
+				}
+				else if(startHour==endHour){
+					if(startMinute>endMinute){
+					JOptionPane.showMessageDialog(new Frame(), "끝나는 시간이 시작 시간보다 빠릅니다.", "시간 입력 오류", JOptionPane.ERROR_MESSAGE);
+					save = false;
+					}
+				}
 				
 				if(alertEnableCheckbox.getState()){
 					String selectedUnit = alertUnitChoice.getSelectedItem();
@@ -63,20 +85,22 @@ public class AddSchedulePanel extends JPanel {
 					}
 				}
 				
-				if(addGoogleCalender.getState()){
-					ScheduleData addScheduleData = new ScheduleData(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
-					scheduleService.getGoogleCalendarApiService().addGoogleCalendarSchedule(addScheduleData);
-					scheduleService.calendarMappingRefresh();
-				} else {
-					scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
+				if(save==true){
+					if(addGoogleCalender.getState()){
+						ScheduleData addScheduleData = new ScheduleData(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
+						scheduleService.getGoogleCalendarApiService().addGoogleCalendarSchedule(addScheduleData);
+						scheduleService.calendarMappingRefresh();
+					} else {
+						scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
+					}
+					
+					thisFrame.setVisible(false);
+					thisFrame.dispose();
+				
+					scheduleService.scheduleAlertSet();
+					((MainFrame)mainFrame).calenderRepaint();
+					mainFrame.revalidate();
 				}
-				
-				thisFrame.setVisible(false);
-				thisFrame.dispose();
-				
-				scheduleService.scheduleAlertSet();
-				((MainFrame)mainFrame).calenderRepaint();
-				mainFrame.revalidate();
 			}
 		});
 		cancelBtn.addActionListener(new ActionListener() {
@@ -119,36 +143,49 @@ public class AddSchedulePanel extends JPanel {
 			endHourChoice.add("" + i);
 		}
 		
-		for(int i=0; i<=60; i+=5){
+		for(int i=0; i<60; i+=5){
 			startMinuteChoice.add("" + i);
 			endMinuteChoice.add("" + i);
 		}
+
 		alertEnableCheckbox.setState(true);
 		
 		alertUnitChoice.add("분");
 		alertUnitChoice.add("시간");
 		alertUnitChoice.select(0);
 		
-		add(selectedDateLable);
-		add(titleLable);
-		add(titleField);
+		panel1.add(selectedDateLable);
 		
-		add(dateLabel);
-		add(startHourChoice);
-		add(startMinuteChoice);
-		add(endHourChoice);
-		add(endMinuteChoice);
+		panel2.add(titleLable);
+		panel2.add(titleField);
+		
+		panel3.add(dateLabel);
+		panel3.add(startHourChoice);
+		panel3.add(startMinuteChoice);
+		panel3.add(timeLabel);
+		panel3.add(endHourChoice);
+		panel3.add(endMinuteChoice);
+		
+		panel4.add(alertEnableCheckbox);
+		panel4.add(alertTimeFied);
+		panel4.add(alertUnitChoice);
+		
+		panel5.add(contentLable);
+		panel5.add(contentArea);
 		
 		add(addGoogleCalender);
 		
-		add(alertEnableCheckbox);
-		add(alertTimeFied);
-		add(alertUnitChoice);
+		panel6.add(submitBtn);
+		panel6.add(cancelBtn);
 		
-		add(contentArea);
+		thisFrame.add(panel1);
+		thisFrame.add(panel2);
+		thisFrame.add(panel3);
+		thisFrame.add(panel4);
+		thisFrame.add(panel5);
+		thisFrame.add(panel6);
+		thisFrame.setTitle("일정 추가");
 		
-		add(submitBtn);
-		add(cancelBtn);
 	}
 
 }
