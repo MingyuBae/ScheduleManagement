@@ -74,7 +74,10 @@ public class AddSchedulePanel extends JPanel {
 					save = false;
 					}
 				}
-				
+				if(title.length()==0){
+					JOptionPane.showMessageDialog(new Frame(), "제목이 비었습니다.", "제목 입력 오류", JOptionPane.ERROR_MESSAGE);
+					save = false;
+				}
 				if(alertEnableCheckbox.getState()){
 					String selectedUnit = alertUnitChoice.getSelectedItem();
 					if("시간".equals(selectedUnit)){
