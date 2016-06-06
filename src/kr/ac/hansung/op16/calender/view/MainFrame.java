@@ -7,6 +7,7 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import kr.ac.hansung.op16.calender.logic.GoogleCalendarApiService;
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
@@ -25,6 +26,8 @@ public class MainFrame extends JFrame {
 	Menu settingMenu = new Menu("설정");
 	MenuItem saveMenuItem = new MenuItem("저장");
 	MenuItem openMenuItem = new MenuItem("열기");
+	MenuItem eventGetMenuItem = new MenuItem("이번달 일정가져오기");
+	MenuItem settingOpenMenuItem = new MenuItem("설정");
 	
 	Panel calenderPanel;
 	Panel scheludeListPanel;
@@ -74,12 +77,43 @@ public class MainFrame extends JFrame {
 						  JOptionPane.showMessageDialog(new Frame(), "파일을 읽을 수 없습니다!", "파일 읽기 오류", JOptionPane.ERROR_MESSAGE);
 					  }
 				}
+				scheduleService.calendarMappingRefresh();
 				calenderRepaint();
+			}
+		});
+		eventGetMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GoogleCalendarApiService apiService = new GoogleCalendarApiService();
+				List<ScheduleData> scheduleList =  apiService.getSchedule(year, month);
+				if(scheduleList != null){
+					int addScheduleCount = scheduleService.addScheduleList(scheduleList);
+					JOptionPane.showMessageDialog(new Frame(), year + "년 " + (month+1) + "월 일정을 " + addScheduleCount + "개 가져왔습니다.", "데이터 가져오기 성공", JOptionPane.INFORMATION_MESSAGE);
+					scheduleService.calendarMappingRefresh();
+					calenderRepaint();
+				} else {
+					JOptionPane.showMessageDialog(new Frame(), "데이터를 가져오는 중 오류가 발생했습니다!", "데이터 가져오기 오류", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		settingOpenMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame settingFrame = new JFrame();
+				Panel settingPanel = new SettingPanel(settingFrame);
+				settingFrame.add(settingPanel);
+				settingFrame.pack();
+				settingFrame.setVisible(true);
+				settingFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			}
 		});
 		
 		fileMenu.add(saveMenuItem);
 		fileMenu.add(openMenuItem);
+		
+		settingMenu.add(eventGetMenuItem);
+		settingMenu.addSeparator();
+		settingMenu.add(settingOpenMenuItem);
 		
 		menuBar.add(fileMenu);
 		menuBar.add(settingMenu);

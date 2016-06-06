@@ -33,8 +33,10 @@ public class ScheduleListPanel extends Panel {
 		for(int i=0; i<scheduleListSize; i++){
 			ScheduleData eachSchedule = dayScheduleList.get(i);
 			String viewString = "";
-			viewString += timeFormat.format(eachSchedule.getStartDate().getTime()) + " ~ " + timeFormat.format(eachSchedule.getEndDate().getTime());
-			viewString += " " + eachSchedule.getTitle();
+			if(! eachSchedule.isDateOnly()){
+				viewString += timeFormat.format(eachSchedule.getStartDate().getTime()) + " ~ " + timeFormat.format(eachSchedule.getEndDate().getTime()) + " ";
+			}
+			viewString += eachSchedule.getTitle();
 			
 			scheduleList.add(viewString, i);
 		}
