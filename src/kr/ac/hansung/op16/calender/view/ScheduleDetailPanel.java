@@ -22,9 +22,12 @@ public class ScheduleDetailPanel extends JPanel {
 	JPanel panel5 = new JPanel();
 	
 	Label titleLable;
+	Label titleLabel = new Label("제목");
+	Label DateLabel = new Label("기간");
 	Label startDateLabel;
 	Label timeLabel = new Label("~");
 	Label endDateLabel;
+	Label conLabel = new Label("내용");
 	Label contentLabel;
 	
 	Button closeBtn;
@@ -37,7 +40,7 @@ public class ScheduleDetailPanel extends JPanel {
 		this.scheduleData = scheduleData;
 		this.thisFrame = thisFrame;
 		thisFrame.setLayout(new GridLayout(6,1));
-		thisFrame.setPreferredSize(new Dimension(300,300));
+		thisFrame.setPreferredSize(new Dimension(330,300));
 	    thisFrame.pack();
 		
 		titleLable = new Label(scheduleData.getTitle());
@@ -77,12 +80,19 @@ public class ScheduleDetailPanel extends JPanel {
 			}
 		});
 		
+		FlowLayout f = new FlowLayout(FlowLayout.LEFT,10,0);
+		panel1.setLayout(f);
+		panel1.add(titleLabel);
 		panel1.add(titleLable);
 		
+		panel2.setLayout(f);
+		panel2.add(DateLabel);
 		panel2.add(startDateLabel);
 		panel2.add(timeLabel);
 		panel2.add(endDateLabel);
 		
+		panel3.setLayout(f);
+		panel3.add(conLabel);
 		panel3.add(contentLabel);
 		
 		panel4.add(closeBtn);

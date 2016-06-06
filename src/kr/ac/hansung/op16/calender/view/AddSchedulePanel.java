@@ -20,7 +20,7 @@ public class AddSchedulePanel extends JPanel {
 	JPanel panel7 = new JPanel();
 	Label selectedDateLable;
 	Label titleLable = new Label("제목");
-	TextField titleField = new TextField(20);
+	TextField titleField = new TextField(30);
 	
 	Label dateLabel = new Label("기간");
 	
@@ -155,11 +155,15 @@ public class AddSchedulePanel extends JPanel {
 		alertUnitChoice.add("시간");
 		alertUnitChoice.select(0);
 		
+		FlowLayout f = new FlowLayout(FlowLayout.LEFT,10,0);
+		panel1.setLayout(f);
 		panel1.add(selectedDateLable);
 		
+		panel2.setLayout(f);
 		panel2.add(titleLable);
 		panel2.add(titleField);
 		
+		panel3.setLayout(f);
 		panel3.add(dateLabel);
 		panel3.add(startHourChoice);
 		panel3.add(startMinuteChoice);
@@ -167,13 +171,18 @@ public class AddSchedulePanel extends JPanel {
 		panel3.add(endHourChoice);
 		panel3.add(endMinuteChoice);
 		
+		panel4.setLayout(f);
 		panel4.add(alertEnableCheckbox);
 		panel4.add(alertTimeFied);
 		panel4.add(alertUnitChoice);
 		
+		panel5.setLayout(f);
 		panel5.add(contentLable);
 		panel5.add(contentArea);
 		
+		FlowLayout f1 = new FlowLayout(FlowLayout.LEFT,100,0);
+		
+		panel6.setLayout(f1);
 		panel6.add(addGoogleCalender);
 		
 		panel7.add(submitBtn);

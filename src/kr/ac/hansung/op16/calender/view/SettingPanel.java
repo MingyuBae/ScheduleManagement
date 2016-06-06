@@ -2,7 +2,9 @@ package kr.ac.hansung.op16.calender.view;
 
 import java.awt.Button;
 import java.awt.Checkbox;
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,20 +22,23 @@ public class SettingPanel extends Panel {
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
-	JPanel panel4 = new JPanel();
-	JPanel panel5 = new JPanel();
 	
 	Checkbox autoReadScheduleListFileBtn = new Checkbox("자동으로 마지막으로 저장한 일정 파일 읽어오기");
 	Checkbox googleApiEnableBtn = new Checkbox("Google Calender 연동");
 	Checkbox showHolidayScheduleBtn = new Checkbox("휴일 정보 가져오기");
 	Checkbox showHansungUnivScheduleBtn = new Checkbox("한성대학교 학사정보 가져오기");
 	
-	Button deleteGoogleApiAuthBtn = new Button("Goole 계정 정보 삭제");
+	Button deleteGoogleApiAuthBtn = new Button("Google 계정 정보 삭제");
 	
 	Button okBtn = new Button("확인");
 	Button cancelBtn = new Button("취소");
 	
 	public SettingPanel(Frame thisFrame) {
+		
+		thisFrame.setLayout(new GridLayout(4,1,0,0));
+        thisFrame.setPreferredSize(new Dimension(300,300));
+        thisFrame.pack();
+        
 		GoogleCalendarApiService apiService = new GoogleCalendarApiService();
 		ScheduleService scheduleService = ScheduleService.getInstence();
 		CalendarSettingData settingData = scheduleService.getSettingData();
@@ -100,13 +105,20 @@ public class SettingPanel extends Panel {
 			}
 		});
 		
-		add(autoReadScheduleListFileBtn);
-		add(googleApiEnableBtn);
-		add(showHolidayScheduleBtn);
-		add(showHansungUnivScheduleBtn);
-		add(deleteGoogleApiAuthBtn);
-		add(okBtn);
-		add(cancelBtn);
+	
+		panel1.add(autoReadScheduleListFileBtn);
+		panel1.add(googleApiEnableBtn);
+		panel2.add(showHolidayScheduleBtn);
+		panel2.add(showHansungUnivScheduleBtn);
+		panel3.add(deleteGoogleApiAuthBtn);
+		panel3.add(okBtn);
+		panel3.add(cancelBtn);
+		
+		thisFrame.add(panel1);
+		thisFrame.add(panel2);
+		thisFrame.add(panel3);
+		
+		thisFrame.setTitle("설정");
 	}
 
 }
