@@ -40,7 +40,7 @@ public class AddSchedulePanel extends JPanel {
 		ScheduleService scheduleService = ScheduleService.getInstence();
 		
 		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
-		thisFrame.setLayout(new GridLayout(7,1));
+		thisFrame.setLayout(new GridLayout(7,1,0,0));
 	    thisFrame.pack();
 		
 		/* 이벤트 등록 */
@@ -127,16 +127,13 @@ public class AddSchedulePanel extends JPanel {
 		panel3.add(endHourChoice);
 		panel3.add(endMinuteChoice);
 		
-		panel4.setLayout(new FlowLayout());
 		panel4.add(alertEnableCheckbox);
 		panel4.add(alertTimeFied);
 		panel4.add(alertUnitChoice);
 		
-		panel5.setLayout(new FlowLayout());
 		panel5.add(contentLable);
 		panel5.add(contentArea);
 		
-		panel6.setLayout(new FlowLayout());
 		panel6.add(submitBtn);
 		panel6.add(cancelBtn);
 		
@@ -146,7 +143,7 @@ public class AddSchedulePanel extends JPanel {
 		thisFrame.add(panel4);
 		thisFrame.add(panel5);
 		thisFrame.add(panel6);
-
+		thisFrame.setTitle("일정 추가");
 		
 	}
 
