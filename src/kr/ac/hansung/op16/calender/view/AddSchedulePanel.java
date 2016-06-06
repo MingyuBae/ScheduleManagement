@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
+import kr.ac.hansung.op16.calender.model.ScheduleData;
 
 public class AddSchedulePanel extends JPanel {
 	Label selectedDateLable;
@@ -19,6 +20,7 @@ public class AddSchedulePanel extends JPanel {
 	Choice endHourChoice = new Choice();
 	Choice endMinuteChoice = new Choice();
 	
+	Checkbox addGoogleCalender = new Checkbox("Google Calendar 등록");
 	Checkbox alertEnableCheckbox = new Checkbox("알람");
 	TextField alertTimeFied = new TextField("5");
 	Choice alertUnitChoice = new Choice();
@@ -31,8 +33,10 @@ public class AddSchedulePanel extends JPanel {
 	
 	public AddSchedulePanel(int year, int month, int day, JFrame thisFrame, JFrame mainFrame) {
 		ScheduleService scheduleService = ScheduleService.getInstence();
+		boolean googleApiEnable = scheduleService.getSettingData().isGoogleApiEnable();
 		
 		selectedDateLable = new Label("" + year + "년 " + month + "월 " + day + "일");
+		
 		
 		/* 이벤트 등록 */
 		submitBtn.addActionListener(new ActionListener() {
@@ -59,7 +63,13 @@ public class AddSchedulePanel extends JPanel {
 					}
 				}
 				
-				scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
+				if(addGoogleCalender.getState()){
+					ScheduleData addScheduleData = new ScheduleData(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
+					scheduleService.getGoogleCalendarApiService().addGoogleCalendarSchedule(addScheduleData);
+					scheduleService.calendarMappingRefresh();
+				} else {
+					scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
+				}
 				
 				thisFrame.setVisible(false);
 				thisFrame.dispose();
@@ -76,7 +86,6 @@ public class AddSchedulePanel extends JPanel {
 				thisFrame.dispose();
 			}
 		});
-		
 		alertEnableCheckbox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -88,6 +97,20 @@ public class AddSchedulePanel extends JPanel {
 					alertUnitChoice.setEnabled(false);
 				}
 				
+			}
+		});
+		addGoogleCalender.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(addGoogleCalender.getState()){
+					alertEnableCheckbox.setEnabled(false);
+					alertTimeFied.setEnabled(false);
+					alertUnitChoice.setEnabled(false);
+				} else {
+					alertEnableCheckbox.setEnabled(true);
+					alertTimeFied.setEnabled(true);
+					alertUnitChoice.setEnabled(true);
+				}
 			}
 		});
 		
@@ -115,6 +138,8 @@ public class AddSchedulePanel extends JPanel {
 		add(startMinuteChoice);
 		add(endHourChoice);
 		add(endMinuteChoice);
+		
+		add(addGoogleCalender);
 		
 		add(alertEnableCheckbox);
 		add(alertTimeFied);

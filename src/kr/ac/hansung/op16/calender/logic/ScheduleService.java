@@ -13,22 +13,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
+import kr.ac.hansung.op16.calender.model.CalendarSettingData;
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
 public class ScheduleService{
-	private static ScheduleService instance = null;
+	private static String SETTING_FILE_NAME = "setting.dat";
+	private static ScheduleService INSTANCE = null;
 	
+	private CalendarSettingData settingData;
 	private int mappingTargetYear, mappingTargetMonth;
 	private String fileName = "calender.dat";
 	private List<ScheduleData> scheduleList = new LinkedList<>();
 	private Map<Integer, List<ScheduleData>> calenderMappingScheduleList;
+	private GoogleCalendarApiService googleCalendarApiService = new GoogleCalendarApiService();
 	Timer scheduleAlertTimer = new Timer();
 	
 	public ScheduleService(){
-		this("calender.dat");
-	}
-	public ScheduleService(String fileName){
-		this.fileName = fileName;
+		if(! readFileSettingData()){
+			settingData = new CalendarSettingData();
+		}
+		if(settingData.isAutoReadScheduleListFile()){
+			fileName = settingData.getLastScheduleListFilePath();
+			readFileSchedulList();
+		}
 	}
 	
 	/**
@@ -37,10 +44,10 @@ public class ScheduleService{
 	 * @return
 	 */
 	public static ScheduleService getInstence(){
-		if(instance == null){
-			instance = new ScheduleService();
+		if(INSTANCE == null){
+			INSTANCE = new ScheduleService();
 		}
-		return instance;
+		return INSTANCE;
 	}
 	
 	/**
@@ -66,7 +73,6 @@ public class ScheduleService{
 	 * 파일에 저장되있는 스케줄을 읽어오는 메소드
 	 * @return 읽기 성공 여부
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean readFileSchedulList(){
 		try{
 			FileInputStream fileIn = new FileInputStream(fileName);
@@ -86,6 +92,46 @@ public class ScheduleService{
 		
 		return true;
 	}
+	
+	/**
+	 * 설정을 파일로 저장하는 메소드
+	 * @return 저장 성공 여부
+	 */
+	public boolean saveFileSettingData(){
+		try{
+			FileOutputStream fileOut = new FileOutputStream(SETTING_FILE_NAME);
+			ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
+			outStream.writeObject(settingData);
+			outStream.close();
+			fileOut.close();
+		} catch(IOException e){
+			System.out.println(e.getMessage());
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 파일에 저장되있는 스케줄을 읽어오는 메소드
+	 * @return 읽기 성공 여부
+	 */
+	public boolean readFileSettingData(){
+		try{
+			FileInputStream fileIn = new FileInputStream(SETTING_FILE_NAME);
+			ObjectInputStream inStream = new ObjectInputStream(fileIn);
+			settingData = (CalendarSettingData) inStream.readObject();
+			inStream.close();
+			fileIn.close();
+		} catch(IOException e){
+			System.out.println(e.getMessage());
+			return false;
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+		return true;
+	}
+	
 	
 	public void scheduleAlertSet(){
 		Calendar nowDate = Calendar.getInstance();
@@ -137,6 +183,20 @@ public class ScheduleService{
 			calendarMappingSchedule(year, month, calendarMappingData, scheduleList.get(i));
 		}
 		
+		if(settingData.isGoogleApiEnable()){
+			List<ScheduleData> googleCalendarSchedule = googleCalendarApiService.getSchedule(year, month);
+			if(googleCalendarSchedule == null)
+				googleCalendarSchedule = new LinkedList<>();
+			
+			if(settingData.isShowHolidaySchedule())
+				googleCalendarSchedule.addAll(googleCalendarApiService.getScheduleEvent(GoogleCalendarApiService.CALENDAR_EVENT_HOLIDAY, year, month));
+			if(settingData.isShowHansungUnivSchedule())
+				googleCalendarSchedule.addAll(googleCalendarApiService.getScheduleEvent(GoogleCalendarApiService.CALENDAR_EVENT_HANSUNGUNIV, year, month));
+			
+			for(int i=0; i<googleCalendarSchedule.size(); i++){
+				calendarMappingSchedule(year, month, calendarMappingData, googleCalendarSchedule.get(i));
+			}
+		}
 		return calendarMappingData;
 	}
 	
@@ -288,5 +348,14 @@ public class ScheduleService{
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	
+	public CalendarSettingData getSettingData() {
+		return settingData;
+	}
+	public void setSettingData(CalendarSettingData settingData) {
+		this.settingData = settingData;
+		saveFileSettingData();
+	}
+	public GoogleCalendarApiService getGoogleCalendarApiService() {
+		return googleCalendarApiService;
+	}
 }

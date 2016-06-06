@@ -27,6 +27,7 @@ public class MainFrame extends JFrame {
 	MenuItem saveMenuItem = new MenuItem("저장");
 	MenuItem openMenuItem = new MenuItem("열기");
 	MenuItem eventGetMenuItem = new MenuItem("이번달 일정가져오기");
+	MenuItem settingOpenMenuItem = new MenuItem("설정");
 	
 	Panel calenderPanel;
 	Panel scheludeListPanel;
@@ -95,11 +96,24 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
+		settingOpenMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame settingFrame = new JFrame();
+				Panel settingPanel = new SettingPanel(settingFrame);
+				settingFrame.add(settingPanel);
+				settingFrame.pack();
+				settingFrame.setVisible(true);
+				settingFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			}
+		});
 		
 		fileMenu.add(saveMenuItem);
 		fileMenu.add(openMenuItem);
 		
 		settingMenu.add(eventGetMenuItem);
+		settingMenu.addSeparator();
+		settingMenu.add(settingOpenMenuItem);
 		
 		menuBar.add(fileMenu);
 		menuBar.add(settingMenu);

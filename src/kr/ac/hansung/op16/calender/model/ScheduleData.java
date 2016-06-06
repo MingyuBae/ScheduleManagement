@@ -11,8 +11,9 @@ public class ScheduleData implements Serializable{
 	String content;
 	Date alertDate;
 	boolean externalSchedule;
+	boolean dateOnly;
 	
-	public ScheduleData(String id, Calendar startDate, Calendar endDate, String title, String content, Date alertDate, boolean externalSchedule){
+	public ScheduleData(String id, Calendar startDate, Calendar endDate, String title, String content, Date alertDate, boolean externalSchedule, boolean dateOnly){
 		this.id = id;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -20,6 +21,7 @@ public class ScheduleData implements Serializable{
 		this.content = content;
 		this.alertDate = alertDate;
 		this.externalSchedule = externalSchedule;
+		this.dateOnly = dateOnly;
 	}
 	
 	public ScheduleData(int year, int month, int day, int startHour, int startMinute, int endHour, int endMinute, int alertTimeSec, String title, String content){
@@ -85,5 +87,11 @@ public class ScheduleData implements Serializable{
 	}
 	public void setExternalSchedule(boolean externalSchedule) {
 		this.externalSchedule = externalSchedule;
+	}
+	public boolean isDateOnly() {
+		return dateOnly;
+	}
+	public void setDateOnly(boolean dateOnly) {
+		this.dateOnly = dateOnly;
 	}
 }

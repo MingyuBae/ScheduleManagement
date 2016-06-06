@@ -50,17 +50,20 @@ public class ScheduleDetailPanel extends JPanel {
 		deleteScheduleBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				scheduleService.deleteSchedule(scheduleData);
-				
+				if(scheduleData.isExternalSchedule()){
+					scheduleService.getGoogleCalendarApiService().deleteGoogleCalendarSchedule(scheduleData.getId());
+					scheduleService.calendarMappingRefresh();
+				} else {
+					scheduleService.deleteSchedule(scheduleData);
+				}
 				thisFrame.setVisible(false);
 				thisFrame.dispose();
 				
 				if(mainFrame instanceof MainFrame){
 					((MainFrame)mainFrame).calenderRepaint();
 				} else if(mainFrame != null){
-					mainFrame.revalidate();					
+					mainFrame.revalidate();		
 				}
-				
 			}
 		});
 		

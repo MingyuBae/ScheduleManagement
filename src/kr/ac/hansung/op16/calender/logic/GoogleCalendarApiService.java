@@ -17,26 +17,27 @@ import com.google.api.services.calendar.model.*;
 
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class GoogleCalendarApiService {
-	private static final String CALENDAR_EVENT_SCHEDULE = "primary";
-	private static final String CALENDAR_EVENT_HOLIDAY = "ko.south_korea#holiday@group.v.calendar.google.com";
-	private static final String CALENDAR_EVENT_HANSUNGUNIV = "hansunginfoteam@gmail.com";
+	public static final String CALENDAR_EVENT_SCHEDULE = "primary";
+	public static final String CALENDAR_EVENT_HOLIDAY = "ko.south_korea#holiday@group.v.calendar.google.com";
+	public static final String CALENDAR_EVENT_HANSUNGUNIV = "hansunginfoteam@gmail.com";
+	
+	private static final String TIME_ZONE = "Asia/Seoul";
 	
 	/** Application name. */
-	private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
+	private static final String APPLICATION_NAME = "[객체지향언어2] 일정 관리 프로그램";
 
 	/** Directory to store user credentials for this application. */
-	private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"),
-			".credentials/calendar-java-quickstart.json");
+	private static final java.io.File DATA_STORE_DIR = new java.io.File("calendarApiAuthData");
 
 	/** Global instance of the {@link FileDataStoreFactory}. */
 	private static FileDataStoreFactory DATA_STORE_FACTORY;
@@ -53,7 +54,7 @@ public class GoogleCalendarApiService {
 	 * If modifying these scopes, delete your previously saved credentials at
 	 * ~/.credentials/calendar-java-quickstart.json
 	 */
-	private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR_READONLY);
+	private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR);
 
 	static {
 		try {
@@ -80,7 +81,6 @@ public class GoogleCalendarApiService {
 		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
 				clientSecrets, SCOPES).setDataStoreFactory(DATA_STORE_FACTORY).setAccessType("offline").build();
 		Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
-		System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
 		return credential;
 	}
 
@@ -122,9 +122,9 @@ public class GoogleCalendarApiService {
 	 * @param month
 	 * @return
 	 */
-	public List<ScheduleData> getHolidayEvent(int year, int month){
+	public List<ScheduleData> getScheduleEvent(String eventName, int year, int month){
 		List<ScheduleData> scheduleList  = new LinkedList<>();
-		List<Event> eventList = getGoogleCalendarSchedule(CALENDAR_EVENT_HOLIDAY, year, month);
+		List<Event> eventList = getGoogleCalendarSchedule(eventName, year, month);
 		
 		if(eventList != null){
 			for(Event eventEach : eventList){
@@ -170,6 +170,63 @@ public class GoogleCalendarApiService {
 	}
 	
 	/**
+	 * 일정을 구글 캘린더에 등록하는 메소드
+	 * @param addScheduleData 추가할 일정 정보
+	 * @return 등록 여부
+	 */
+	public boolean addGoogleCalendarSchedule(ScheduleData addScheduleData){
+		Event addEvent = scheduleDataToEvent(addScheduleData);
+		
+		try {
+			addEvent = getCalendarService().events().insert(CALENDAR_EVENT_SCHEDULE, addEvent).execute();
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 구글 캘린더 이벤트 삭제 
+	 * @param deleteEventId 삭제할 이벤트 ID
+	 * @return
+	 */
+	public boolean deleteGoogleCalendarSchedule(String deleteEventId){
+		try {
+			getCalendarService().events().delete(CALENDAR_EVENT_SCHEDULE, deleteEventId).execute();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 내부에서 사용하는 일정 정보를 google API에 전송하기 위해 변환하는 메소드
+	 * @param target
+	 * @return
+	 */
+	public Event scheduleDataToEvent(ScheduleData target){
+		Event event = new Event();
+		event.setSummary(target.getTitle());
+		event.setDescription(target.getContent());
+		
+		DateTime startDateTime = new DateTime(target.getStartDate().getTimeInMillis());
+		EventDateTime start = new EventDateTime();
+		start.setDateTime(startDateTime);
+		start.setTimeZone(TIME_ZONE);
+		event.setStart(start);
+		
+		DateTime endDateTime = new DateTime(target.getEndDate().getTimeInMillis());
+		EventDateTime end = new EventDateTime();
+		end.setDateTime(endDateTime);
+		end.setTimeZone(TIME_ZONE);
+		event.setEnd(end);
+		
+		return event;
+	}
+	
+	/**
 	 * google API에서 받은 이벤트를 프로그램 내부에 사용하는 일정 정보로 변환하는 메소드
 	 * @param target
 	 * @return
@@ -177,8 +234,13 @@ public class GoogleCalendarApiService {
 	public ScheduleData eventToScheduleData(Event target){
 		Calendar startDate = eventDateTimeToCalendar(target.getStart(), true);
 		Calendar endDate = eventDateTimeToCalendar(target.getEnd(), false);
+		boolean dateOnly = false;
 		
-		return new ScheduleData(target.getId(), startDate, endDate, target.getSummary(), target.getDescription(), null, true);
+		if(target.getStart().getDateTime() == null){
+			dateOnly = true;
+		}
+		
+		return new ScheduleData(target.getId(), startDate, endDate, target.getSummary(), target.getDescription(), null, true, dateOnly);
 	}
 	
 	/**
@@ -190,14 +252,9 @@ public class GoogleCalendarApiService {
 		Calendar returnValue = Calendar.getInstance();
 		if(eventDateTimeTarget.getDateTime() == null){
 			returnValue.setTimeInMillis(eventDateTimeTarget.getDate().getValue());
-			if(isStart){
-				returnValue.set(Calendar.HOUR_OF_DAY, 0);
-				returnValue.set(Calendar.MINUTE, 0);
-				returnValue.set(Calendar.SECOND, 0);
-			} else {
-				returnValue.set(Calendar.HOUR_OF_DAY, 23);
-				returnValue.set(Calendar.MINUTE, 59);
-				returnValue.set(Calendar.SECOND, 59);
+			returnValue.add(Calendar.HOUR, -9);
+			if(! isStart){
+				returnValue.add(Calendar.MILLISECOND, -1);
 			}
 		} else {
 			returnValue.setTimeInMillis(eventDateTimeTarget.getDateTime().getValue());
@@ -205,4 +262,27 @@ public class GoogleCalendarApiService {
 		return returnValue;
 	}
 
+	/**
+	 * 구글 인증 정보 삭제 메소드
+	 * @return 삭제 여부
+	 */
+	public boolean deleteGoogleApiAuth(){
+		File[] files = DATA_STORE_DIR.listFiles();
+		for(int i=0; i<files.length; i++){
+			files[i].delete();
+		}
+		return DATA_STORE_DIR.delete();
+	}
+	
+	/**
+	 * 구글 인증 파일이 있는지 확인하는 메소드
+	 * @return 인증파일 유무
+	 */
+	public boolean isAuthFileExist(){
+		if(DATA_STORE_DIR != null && DATA_STORE_DIR.exists()){
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
