@@ -3,6 +3,7 @@ package kr.ac.hansung.op16.calender.view;
 import java.awt.Button;
 import java.awt.Checkbox;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Panel;
@@ -35,8 +36,8 @@ public class SettingPanel extends Panel {
 	
 	public SettingPanel(Frame thisFrame) {
 		
-		thisFrame.setLayout(new GridLayout(4,1,0,0));
-        thisFrame.setPreferredSize(new Dimension(300,300));
+		thisFrame.setLayout(new GridLayout(4,1));
+        thisFrame.setPreferredSize(new Dimension(300,250));
         thisFrame.pack();
         
 		GoogleCalendarApiService apiService = new GoogleCalendarApiService();
@@ -105,11 +106,16 @@ public class SettingPanel extends Panel {
 			}
 		});
 		
-	
+		FlowLayout f = new FlowLayout(FlowLayout.LEFT,10,0);
+		
+		panel1.setLayout(f);
 		panel1.add(autoReadScheduleListFileBtn);
 		panel1.add(googleApiEnableBtn);
+		
+		panel2.setLayout(f);
 		panel2.add(showHolidayScheduleBtn);
 		panel2.add(showHansungUnivScheduleBtn);
+		
 		panel3.add(deleteGoogleApiAuthBtn);
 		panel3.add(okBtn);
 		panel3.add(cancelBtn);

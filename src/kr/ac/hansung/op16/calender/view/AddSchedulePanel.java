@@ -46,7 +46,7 @@ public class AddSchedulePanel extends JPanel {
 		boolean googleApiEnable = scheduleService.getSettingData().isGoogleApiEnable();
 		
 		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
-		thisFrame.setLayout(new GridLayout(8,1,0,0));
+		thisFrame.setLayout(new GridLayout(8,1));
 		thisFrame.setPreferredSize(new Dimension(350,500));
 	    thisFrame.pack();
 		
