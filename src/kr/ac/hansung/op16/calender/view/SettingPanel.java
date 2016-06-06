@@ -10,12 +10,19 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import kr.ac.hansung.op16.calender.logic.GoogleCalendarApiService;
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 import kr.ac.hansung.op16.calender.model.CalendarSettingData;
 
 public class SettingPanel extends Panel {
+	JPanel panel1 = new JPanel();
+	JPanel panel2 = new JPanel();
+	JPanel panel3 = new JPanel();
+	JPanel panel4 = new JPanel();
+	JPanel panel5 = new JPanel();
+	
 	Checkbox autoReadScheduleListFileBtn = new Checkbox("자동으로 마지막으로 저장한 일정 파일 읽어오기");
 	Checkbox googleApiEnableBtn = new Checkbox("Google Calender 연동");
 	Checkbox showHolidayScheduleBtn = new Checkbox("휴일 정보 가져오기");

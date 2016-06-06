@@ -17,6 +17,7 @@ public class AddSchedulePanel extends JPanel {
 	JPanel panel4 = new JPanel();
 	JPanel panel5 = new JPanel();
 	JPanel panel6 = new JPanel();
+	JPanel panel7 = new JPanel();
 	Label selectedDateLable;
 	Label titleLable = new Label("제목");
 	TextField titleField = new TextField(20);
@@ -45,7 +46,7 @@ public class AddSchedulePanel extends JPanel {
 		boolean googleApiEnable = scheduleService.getSettingData().isGoogleApiEnable();
 		
 		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
-		thisFrame.setLayout(new GridLayout(7,1,0,0));
+		thisFrame.setLayout(new GridLayout(8,1,0,0));
 		thisFrame.setPreferredSize(new Dimension(350,500));
 	    thisFrame.pack();
 		
@@ -173,10 +174,10 @@ public class AddSchedulePanel extends JPanel {
 		panel5.add(contentLable);
 		panel5.add(contentArea);
 		
-		add(addGoogleCalender);
+		panel6.add(addGoogleCalender);
 		
-		panel6.add(submitBtn);
-		panel6.add(cancelBtn);
+		panel7.add(submitBtn);
+		panel7.add(cancelBtn);
 		
 		thisFrame.add(panel1);
 		thisFrame.add(panel2);
@@ -184,6 +185,7 @@ public class AddSchedulePanel extends JPanel {
 		thisFrame.add(panel4);
 		thisFrame.add(panel5);
 		thisFrame.add(panel6);
+		thisFrame.add(panel7);
 		thisFrame.setTitle("일정 추가");
 		
 	}
