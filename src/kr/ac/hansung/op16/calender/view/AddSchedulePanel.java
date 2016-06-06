@@ -8,6 +8,8 @@ import javax.swing.*;
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 
 public class AddSchedulePanel extends JPanel {
+	
+	boolean save = true;
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
@@ -57,6 +59,16 @@ public class AddSchedulePanel extends JPanel {
 				String content = contentArea.getText();
 				int alertTime = -1;
 				
+				if(startHour > endHour){
+					JOptionPane.showMessageDialog(new Frame(), "끝나는 시간이 시작 시간보다 빠릅니다.", "시간 입력 오류", JOptionPane.ERROR_MESSAGE);
+					save = false;
+				}
+				else if(startHour==endHour){
+					if(startMinute>endMinute){
+					JOptionPane.showMessageDialog(new Frame(), "끝나는 시간이 시작 시간보다 빠릅니다.", "시간 입력 오류", JOptionPane.ERROR_MESSAGE);
+					save = false;
+					}
+				}
 				
 				if(alertEnableCheckbox.getState()){
 					String selectedUnit = alertUnitChoice.getSelectedItem();
@@ -69,7 +81,9 @@ public class AddSchedulePanel extends JPanel {
 					}
 				}
 				
-				scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
+				if(save==true){
+					scheduleService.addSchedule(year, month, day, startHour, startMinute, endHour, endMinute, alertTime, title, content);
+				}
 				
 				thisFrame.setVisible(false);
 				thisFrame.dispose();
