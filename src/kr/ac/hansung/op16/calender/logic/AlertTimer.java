@@ -26,7 +26,6 @@ public class AlertTimer extends TimerTask {
 		alertWindowFrame.setVisible(true);
 		alertWindowFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		alertWindowFrame.setTitle("알람");
-
 	}
 
 }
