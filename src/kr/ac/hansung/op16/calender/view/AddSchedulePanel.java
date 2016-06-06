@@ -31,7 +31,7 @@ public class AddSchedulePanel extends JPanel {
 	Choice alertUnitChoice = new Choice();
 	
 	Label contentLable = new Label("상세내용");
-	TextArea contentArea = new TextArea(5,50);
+	TextArea contentArea = new TextArea(3,30);
 	
 	Button submitBtn = new Button("추가");
 	Button cancelBtn = new Button("취소");
@@ -41,6 +41,7 @@ public class AddSchedulePanel extends JPanel {
 		
 		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
 		thisFrame.setLayout(new GridLayout(7,1,0,0));
+		thisFrame.setPreferredSize(new Dimension(350,500));
 	    thisFrame.pack();
 		
 		/* 이벤트 등록 */
@@ -105,10 +106,11 @@ public class AddSchedulePanel extends JPanel {
 			endHourChoice.add("" + i);
 		}
 		
-		for(int i=0; i<=60; i+=5){
+		for(int i=0; i<60; i+=5){
 			startMinuteChoice.add("" + i);
 			endMinuteChoice.add("" + i);
 		}
+
 		alertEnableCheckbox.setState(true);
 		
 		alertUnitChoice.add("분");
