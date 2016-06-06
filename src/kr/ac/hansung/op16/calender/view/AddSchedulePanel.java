@@ -8,14 +8,21 @@ import javax.swing.*;
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 
 public class AddSchedulePanel extends JPanel {
+	JPanel panel1 = new JPanel();
+	JPanel panel2 = new JPanel();
+	JPanel panel3 = new JPanel();
+	JPanel panel4 = new JPanel();
+	JPanel panel5 = new JPanel();
+	JPanel panel6 = new JPanel();
 	Label selectedDateLable;
 	Label titleLable = new Label("제목");
-	TextField titleField = new TextField();
+	TextField titleField = new TextField(20);
 	
 	Label dateLabel = new Label("기간");
 	
 	Choice startHourChoice = new Choice();
 	Choice startMinuteChoice = new Choice();
+	Label timeLabel = new Label("~");
 	Choice endHourChoice = new Choice();
 	Choice endMinuteChoice = new Choice();
 	
@@ -24,7 +31,7 @@ public class AddSchedulePanel extends JPanel {
 	Choice alertUnitChoice = new Choice();
 	
 	Label contentLable = new Label("상세내용");
-	TextArea contentArea = new TextArea();
+	TextArea contentArea = new TextArea(5,50);
 	
 	Button submitBtn = new Button("추가");
 	Button cancelBtn = new Button("취소");
@@ -32,7 +39,9 @@ public class AddSchedulePanel extends JPanel {
 	public AddSchedulePanel(int year, int month, int day, JFrame thisFrame, JFrame mainFrame) {
 		ScheduleService scheduleService = ScheduleService.getInstence();
 		
-		selectedDateLable = new Label("" + year + "년 " + month + "월 " + day + "일");
+		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
+		thisFrame.setLayout(new GridLayout(7,1));
+	    thisFrame.pack();
 		
 		/* 이벤트 등록 */
 		submitBtn.addActionListener(new ActionListener() {
@@ -106,24 +115,39 @@ public class AddSchedulePanel extends JPanel {
 		alertUnitChoice.add("시간");
 		alertUnitChoice.select(0);
 		
-		add(selectedDateLable);
-		add(titleLable);
-		add(titleField);
+		panel1.add(selectedDateLable);
 		
-		add(dateLabel);
-		add(startHourChoice);
-		add(startMinuteChoice);
-		add(endHourChoice);
-		add(endMinuteChoice);
+		panel2.add(titleLable);
+		panel2.add(titleField);
 		
-		add(alertEnableCheckbox);
-		add(alertTimeFied);
-		add(alertUnitChoice);
+		panel3.add(dateLabel);
+		panel3.add(startHourChoice);
+		panel3.add(startMinuteChoice);
+		panel3.add(timeLabel);
+		panel3.add(endHourChoice);
+		panel3.add(endMinuteChoice);
 		
-		add(contentArea);
+		panel4.setLayout(new FlowLayout());
+		panel4.add(alertEnableCheckbox);
+		panel4.add(alertTimeFied);
+		panel4.add(alertUnitChoice);
 		
-		add(submitBtn);
-		add(cancelBtn);
+		panel5.setLayout(new FlowLayout());
+		panel5.add(contentLable);
+		panel5.add(contentArea);
+		
+		panel6.setLayout(new FlowLayout());
+		panel6.add(submitBtn);
+		panel6.add(cancelBtn);
+		
+		thisFrame.add(panel1);
+		thisFrame.add(panel2);
+		thisFrame.add(panel3);
+		thisFrame.add(panel4);
+		thisFrame.add(panel5);
+		thisFrame.add(panel6);
+
+		
 	}
 
 }
