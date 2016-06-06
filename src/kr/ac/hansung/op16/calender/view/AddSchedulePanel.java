@@ -8,7 +8,6 @@ import javax.swing.*;
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 
 public class AddSchedulePanel extends JPanel {
-
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
@@ -33,17 +32,21 @@ public class AddSchedulePanel extends JPanel {
 	Choice endMinuteChoice = new Choice();
 	
 	Label contentLable = new Label("상세내용");
-	TextArea contentArea = new TextArea();
+	TextArea contentArea = new TextArea(5,50);
 	
 	Button submitBtn = new Button("추가");
 	Button cancelBtn = new Button("취소");
 	
+		
 	public AddSchedulePanel(int year, int month, int day, JFrame thisFrame, JFrame mainFrame) {
 		ScheduleService scheduleService = ScheduleService.getInstence();
 		
 		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
 		
 		thisFrame.setLayout(new GridLayout(6,1));
+        thisFrame.setPreferredSize(new Dimension(500,650));
+        thisFrame.pack();
+
 		
 		/* 이벤트 등록 */
 		submitBtn.addActionListener(new ActionListener() {
@@ -111,10 +114,6 @@ public class AddSchedulePanel extends JPanel {
 		thisFrame.add(panel6);
 		
 		thisFrame.setTitle("일정 추가");
-		thisFrame.setSize(500,500);
-		thisFrame.setVisible(true);
-
-		
 	}
 
 }
