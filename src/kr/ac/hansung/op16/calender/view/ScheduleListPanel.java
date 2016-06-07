@@ -24,7 +24,6 @@ public class ScheduleListPanel extends Panel {
 
 	public ScheduleListPanel(int year, int month, int day, JFrame mainFrame) {
 		scheduleService = ScheduleService.getInstence();
-		
 		this.mainFrame = mainFrame;
 		dayScheduleList = scheduleService.getDayScheduleList(year, month, day);
 		int scheduleListSize = dayScheduleList == null ? 0: dayScheduleList.size();
@@ -51,7 +50,7 @@ public class ScheduleListPanel extends Panel {
 				detailScheduleFormFrame.add(new ScheduleDetailPanel(dayScheduleList.get(scheduleList.getSelectedIndex()), detailScheduleFormFrame, mainFrame));
 				detailScheduleFormFrame.pack();
 				detailScheduleFormFrame.setVisible(true);
-				detailScheduleFormFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+				detailScheduleFormFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 		});
 		addScheduleBtn.addActionListener(new ActionListener() {
@@ -61,7 +60,7 @@ public class ScheduleListPanel extends Panel {
 				addScheduleFormFrame.add(new AddSchedulePanel(year, month, day, addScheduleFormFrame, mainFrame));
 				addScheduleFormFrame.pack();
 				addScheduleFormFrame.setVisible(true);
-				addScheduleFormFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+				addScheduleFormFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 		});
 		

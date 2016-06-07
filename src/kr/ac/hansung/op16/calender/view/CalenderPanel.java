@@ -3,7 +3,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import kr.ac.hansung.op16.calender.logic.GoogleCalendarApiService;
+import kr.ac.hansung.op16.calender.logic.ScheduleService;
+import kr.ac.hansung.op16.calender.model.ScheduleData;
+
 import java.util.Calendar;
+import java.util.Map;
 
 public class CalenderPanel extends Panel {	
 	Button prevMonthBtn = new Button("<");
@@ -14,7 +19,10 @@ public class CalenderPanel extends Panel {
 	Button[] dayButton;
 	Label[] lastBlankDay;
 	
+	Font scheduleBtnFont = new Font("Dialog", Font.BOLD, 13);
+	
 	public CalenderPanel(int year, int month, MainFrame superFrame) {
+		ScheduleService scheduleService = ScheduleService.getInstence();
 		Calendar calendarInfo = Calendar.getInstance();
 		calendarInfo.set(year, month, 1, 0, 0, 0);
 		int firstDayPosition = calendarInfo.get(Calendar.DAY_OF_WEEK);
@@ -28,6 +36,9 @@ public class CalenderPanel extends Panel {
 		dayOfWeekLabel[4] = new Label("목");
 		dayOfWeekLabel[5] = new Label("금");
 		dayOfWeekLabel[6] = new Label("토");
+		
+		dayOfWeekLabel[0].setForeground(Color.RED);
+		dayOfWeekLabel[6].setForeground(Color.BLUE);
 		
 		/* 이벤트 등록 */
 		prevMonthBtn.addActionListener(new ActionListener() {
@@ -75,7 +86,23 @@ public class CalenderPanel extends Panel {
 		/* 해당월의 1일 ~ 말일까지 출력 */
 		dayButton = new Button[lastDayOfMonth];
 		for(int i=0; i<dayButton.length; i++){
+			java.util.List<ScheduleData> dayScheduleList = scheduleService.getDayScheduleList(year, month, (i+1));
 			dayButton[i] = new Button("" + (i+1));
+			
+			if(((firstDayPosition+i)%7) == 0){
+				dayButton[i].setForeground(Color.BLUE);
+			} else if(((firstDayPosition+i)%7) == 1){
+				dayButton[i].setForeground(Color.RED);
+			}
+			
+			if(dayScheduleList != null){
+				dayButton[i].setFont(scheduleBtnFont);
+				for(int j=0; j<dayScheduleList.size(); j++){
+					if(GoogleCalendarApiService.CALENDAR_EVENT_HOLIDAY.equals(dayScheduleList.get(j).getScheduleSource()))
+						dayButton[i].setForeground(Color.MAGENTA);
+				}
+			}
+			
 			add(dayButton[i]);
 			dayButton[i].addActionListener(new ActionListener() {
 				@Override

@@ -161,7 +161,7 @@ public class GoogleCalendarApiService {
 											.setSingleEvents(true)
 											.execute();
 			List<Event> items = events.getItems();
-			
+			System.out.println("일정 가져옴...");
 			return items;
 		} catch (IOException e) {
 			System.err.println("데이터를 가져오는 중 오류가 발생하였습니다");
@@ -240,7 +240,7 @@ public class GoogleCalendarApiService {
 			dateOnly = true;
 		}
 		
-		return new ScheduleData(target.getId(), startDate, endDate, target.getSummary(), target.getDescription(), null, true, dateOnly);
+		return new ScheduleData(target.getId(), startDate, endDate, target.getSummary(), target.getDescription(), null, target.getCreator().getEmail(), true, dateOnly);
 	}
 	
 	/**

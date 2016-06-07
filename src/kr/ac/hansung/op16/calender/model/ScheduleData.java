@@ -4,22 +4,25 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ScheduleData implements Serializable{
-	String id;
-	Calendar startDate;
-	Calendar endDate;
-	String title;
-	String content;
-	Date alertDate;
-	boolean externalSchedule;
-	boolean dateOnly;
+	private String id;
+	private Calendar startDate;
+	private Calendar endDate;
+	private String title;
+	private String content;
+	private Date alertDate;
+	private String scheduleSource;
+	private boolean externalSchedule;
+	private boolean dateOnly;
 	
-	public ScheduleData(String id, Calendar startDate, Calendar endDate, String title, String content, Date alertDate, boolean externalSchedule, boolean dateOnly){
+	public ScheduleData(String id, Calendar startDate, Calendar endDate, String title, String content, Date alertDate, String scheduleSource
+						, boolean externalSchedule, boolean dateOnly){
 		this.id = id;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.title = title;
 		this.content = content;
 		this.alertDate = alertDate;
+		this.scheduleSource = scheduleSource;
 		this.externalSchedule = externalSchedule;
 		this.dateOnly = dateOnly;
 	}
@@ -93,5 +96,11 @@ public class ScheduleData implements Serializable{
 	}
 	public void setDateOnly(boolean dateOnly) {
 		this.dateOnly = dateOnly;
+	}
+	public String getScheduleSource() {
+		return scheduleSource;
+	}
+	public void setScheduleSource(String scheduleSource) {
+		this.scheduleSource = scheduleSource;
 	}
 }

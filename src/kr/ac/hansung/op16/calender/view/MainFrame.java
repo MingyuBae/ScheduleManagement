@@ -2,8 +2,11 @@ package kr.ac.hansung.op16.calender.view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -104,7 +107,7 @@ public class MainFrame extends JFrame {
 				settingFrame.add(settingPanel);
 				settingFrame.pack();
 				settingFrame.setVisible(true);
-				settingFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+				settingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 		});
 		
@@ -141,6 +144,7 @@ public class MainFrame extends JFrame {
 		getContentPane().removeAll();
 		getContentPane().add(calenderPanel);
 		getContentPane().add(scheludeListPanel);
+		
 		revalidate();
 	}
 	
