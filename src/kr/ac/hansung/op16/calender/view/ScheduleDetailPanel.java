@@ -2,8 +2,18 @@ package kr.ac.hansung.op16.calender.view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -33,7 +43,7 @@ public class ScheduleDetailPanel extends JPanel {
 	Button closeBtn;
 	Button deleteScheduleBtn;
 	
-	public ScheduleDetailPanel(ScheduleData scheduleData, JFrame thisFrame, JFrame mainFrame) {
+	public ScheduleDetailPanel(ScheduleData scheduleData, JFrame thisFrame, JFrame mainFrame, boolean alertSound) {
 		SimpleDateFormat timeFormat = new SimpleDateFormat("YY-MM-dd HH:mm");
 		
 		this.scheduleService = ScheduleService.getInstence();
@@ -80,18 +90,17 @@ public class ScheduleDetailPanel extends JPanel {
 			}
 		});
 		
-		FlowLayout f = new FlowLayout(FlowLayout.LEFT,10,0);
-		panel1.setLayout(f);
+		panel1.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		panel1.add(titleLabel);
 		panel1.add(titleLable);
 		
-		panel2.setLayout(f);
+		panel2.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		panel2.add(DateLabel);
 		panel2.add(startDateLabel);
 		panel2.add(timeLabel);
 		panel2.add(endDateLabel);
 		
-		panel3.setLayout(f);
+		panel3.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		panel3.add(conLabel);
 		panel3.add(contentLabel);
 		
@@ -104,6 +113,43 @@ public class ScheduleDetailPanel extends JPanel {
 		thisFrame.add(panel3);
 		thisFrame.add(panel4);
 		thisFrame.setTitle("일정 상세");
+		if(alertSound)
+			playAlertSound();
+	}
+	
+	private void playAlertSound(){
+		try {
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("./alertSound.wav"));
+			AudioFormat audioFormat = audioInputStream.getFormat();
+
+			DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
+
+			SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+
+			class PlayThread extends Thread {
+				byte tempBuffer[] = new byte[10000];
+
+				public void run() {
+					try {
+						sourceDataLine.open(audioFormat);
+						sourceDataLine.start();
+						int cnt;
+						while ((cnt = audioInputStream.read(tempBuffer, 0, tempBuffer.length)) != -1) {
+							if (cnt > 0) {
+								sourceDataLine.write(tempBuffer, 0, cnt);
+							}
+						}
+						sourceDataLine.drain();
+						sourceDataLine.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			new PlayThread().start();
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

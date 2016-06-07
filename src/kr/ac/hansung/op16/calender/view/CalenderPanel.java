@@ -1,14 +1,12 @@
 package kr.ac.hansung.op16.calender.view;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 
 import kr.ac.hansung.op16.calender.logic.GoogleCalendarApiService;
 import kr.ac.hansung.op16.calender.logic.ScheduleService;
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
 import java.util.Calendar;
-import java.util.Map;
 
 public class CalenderPanel extends Panel {	
 	Button prevMonthBtn = new Button("<");

@@ -1,6 +1,5 @@
 package kr.ac.hansung.op16.calender.logic;
 
-import java.awt.Frame;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
@@ -19,7 +18,7 @@ public class AlertTimer extends TimerTask {
 	@Override
 	public void run() {
 		JFrame alertWindowFrame = new JFrame();
-		ScheduleDetailPanel scheduleDetailPanel = new ScheduleDetailPanel(alertScheduleData, alertWindowFrame, null);
+		ScheduleDetailPanel scheduleDetailPanel = new ScheduleDetailPanel(alertScheduleData, alertWindowFrame, null, true);
 		
 		alertWindowFrame.add(scheduleDetailPanel);
 		alertWindowFrame.pack();

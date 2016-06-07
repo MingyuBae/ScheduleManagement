@@ -47,7 +47,7 @@ public class ScheduleListPanel extends Panel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFrame detailScheduleFormFrame = new JFrame();
-				detailScheduleFormFrame.add(new ScheduleDetailPanel(dayScheduleList.get(scheduleList.getSelectedIndex()), detailScheduleFormFrame, mainFrame));
+				detailScheduleFormFrame.add(new ScheduleDetailPanel(dayScheduleList.get(scheduleList.getSelectedIndex()), detailScheduleFormFrame, mainFrame, false));
 				detailScheduleFormFrame.pack();
 				detailScheduleFormFrame.setVisible(true);
 				detailScheduleFormFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

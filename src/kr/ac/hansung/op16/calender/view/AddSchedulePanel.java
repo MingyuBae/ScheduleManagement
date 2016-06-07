@@ -9,8 +9,7 @@ import kr.ac.hansung.op16.calender.logic.ScheduleService;
 import kr.ac.hansung.op16.calender.model.ScheduleData;
 
 public class AddSchedulePanel extends JPanel {
-	
-	boolean save = true;
+	JPanel formPanel = new JPanel();
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
@@ -43,7 +42,7 @@ public class AddSchedulePanel extends JPanel {
 	
 	public AddSchedulePanel(int year, int month, int day, JFrame thisFrame, JFrame mainFrame) {
 		ScheduleService scheduleService = ScheduleService.getInstence();
-		boolean googleApiEnable = scheduleService.getSettingData().isGoogleApiEnable();
+		addGoogleCalender.setEnabled(scheduleService.getSettingData().isGoogleApiEnable());
 		
 		selectedDateLable = new Label("" + year + "년 " + (month+1) + "월 " + day + "일");
 		thisFrame.setLayout(new GridLayout(8,1));
@@ -55,7 +54,6 @@ public class AddSchedulePanel extends JPanel {
 		submitBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO 입력값 확인 필요
 				String title = titleField.getText();
 				int startHour = Integer.parseInt(startHourChoice.getSelectedItem());
 				int startMinute = Integer.parseInt(startMinuteChoice.getSelectedItem());
@@ -63,6 +61,7 @@ public class AddSchedulePanel extends JPanel {
 				int endMinute = Integer.parseInt(endMinuteChoice.getSelectedItem());
 				String content = contentArea.getText();
 				int alertTime = -1;
+				boolean save = true;
 				
 				if(startHour > endHour){
 					JOptionPane.showMessageDialog(new Frame(), "끝나는 시간이 시작 시간보다 빠릅니다.", "시간 입력 오류", JOptionPane.ERROR_MESSAGE);
@@ -158,15 +157,14 @@ public class AddSchedulePanel extends JPanel {
 		alertUnitChoice.add("시간");
 		alertUnitChoice.select(0);
 		
-		FlowLayout f = new FlowLayout(FlowLayout.LEFT,10,0);
-		panel1.setLayout(f);
+		panel1.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		panel1.add(selectedDateLable);
 		
-		panel2.setLayout(f);
+		panel2.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		panel2.add(titleLable);
 		panel2.add(titleField);
 		
-		panel3.setLayout(f);
+		panel3.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		panel3.add(dateLabel);
 		panel3.add(startHourChoice);
 		panel3.add(startMinuteChoice);
@@ -174,12 +172,12 @@ public class AddSchedulePanel extends JPanel {
 		panel3.add(endHourChoice);
 		panel3.add(endMinuteChoice);
 		
-		panel4.setLayout(f);
+		panel4.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		panel4.add(alertEnableCheckbox);
 		panel4.add(alertTimeFied);
 		panel4.add(alertUnitChoice);
 		
-		panel5.setLayout(f);
+		panel5.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		panel5.add(contentLable);
 		panel5.add(contentArea);
 		
