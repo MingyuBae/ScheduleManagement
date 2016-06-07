@@ -1,4 +1,4 @@
-package kr.ac.hansung.op16.calender.view;
+package calender.view;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,19 +6,12 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.Line;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import kr.ac.hansung.op16.calender.logic.ScheduleService;
-import kr.ac.hansung.op16.calender.model.ScheduleData;
+import calender.logic.ScheduleService;
+import calender.model.ScheduleData;
 
 public class ScheduleDetailPanel extends JPanel {
 	ScheduleService scheduleService;

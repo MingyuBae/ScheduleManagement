@@ -1,6 +1,6 @@
-package kr.ac.hansung.op16.calender;
+package calender;
 
-import kr.ac.hansung.op16.calender.view.MainFrame;
+import calender.view.MainFrame;
 
 public class MainApp {
 	

@@ -1,4 +1,4 @@
-package kr.ac.hansung.op16.calender.logic;
+package calender.logic;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import kr.ac.hansung.op16.calender.model.ScheduleData;
+import calender.model.ScheduleData;
 
 public class ScheduleServiceTest {
 

@@ -1,4 +1,4 @@
-package kr.ac.hansung.op16.calender.view;
+package calender.view;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -6,9 +6,9 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import kr.ac.hansung.op16.calender.logic.GoogleCalendarApiService;
-import kr.ac.hansung.op16.calender.logic.ScheduleService;
-import kr.ac.hansung.op16.calender.model.ScheduleData;
+import calender.logic.GoogleCalendarApiService;
+import calender.logic.ScheduleService;
+import calender.model.ScheduleData;
 
 import java.util.Calendar;
 import java.util.List;
@@ -26,6 +26,7 @@ public class MainFrame extends JFrame {
 	MenuItem saveMenuItem = new MenuItem("저장");
 	MenuItem openMenuItem = new MenuItem("열기");
 	MenuItem eventGetMenuItem = new MenuItem("이번달 일정가져오기");
+	MenuItem refreshMenuItem = new MenuItem("새로고침");
 	MenuItem settingOpenMenuItem = new MenuItem("설정");
 	
 	Panel calenderPanel;
@@ -95,6 +96,13 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
+		refreshMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				scheduleService.calendarMappingRefresh();
+				calenderRepaint();
+			}
+		});
 		settingOpenMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -111,6 +119,7 @@ public class MainFrame extends JFrame {
 		fileMenu.add(openMenuItem);
 		
 		settingMenu.add(eventGetMenuItem);
+		settingMenu.add(refreshMenuItem);
 		settingMenu.addSeparator();
 		settingMenu.add(settingOpenMenuItem);
 		

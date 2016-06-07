@@ -1,4 +1,4 @@
-package kr.ac.hansung.op16.calender.logic;
+package calender.logic;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
-import kr.ac.hansung.op16.calender.model.CalendarSettingData;
-import kr.ac.hansung.op16.calender.model.ScheduleData;
+import calender.model.CalendarSettingData;
+import calender.model.ScheduleData;
 
 public class ScheduleService{
 	private static String SETTING_FILE_NAME = "setting.dat";

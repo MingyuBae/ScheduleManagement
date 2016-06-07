@@ -1,4 +1,4 @@
-package kr.ac.hansung.op16.calender.view;
+package calender.view;
 
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -15,9 +15,9 @@ import java.awt.event.ItemListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import kr.ac.hansung.op16.calender.logic.GoogleCalendarApiService;
-import kr.ac.hansung.op16.calender.logic.ScheduleService;
-import kr.ac.hansung.op16.calender.model.CalendarSettingData;
+import calender.logic.GoogleCalendarApiService;
+import calender.logic.ScheduleService;
+import calender.model.CalendarSettingData;
 
 public class SettingPanel extends Panel {
 	JPanel panel1 = new JPanel();

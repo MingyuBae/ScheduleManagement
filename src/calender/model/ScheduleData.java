@@ -1,4 +1,4 @@
-package kr.ac.hansung.op16.calender.model;
+package calender.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;

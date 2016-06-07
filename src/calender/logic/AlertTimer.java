@@ -1,11 +1,11 @@
-package kr.ac.hansung.op16.calender.logic;
+package calender.logic;
 
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
-import kr.ac.hansung.op16.calender.model.ScheduleData;
-import kr.ac.hansung.op16.calender.view.ScheduleDetailPanel;
+import calender.model.ScheduleData;
+import calender.view.ScheduleDetailPanel;
 
 public class AlertTimer extends TimerTask {
 	ScheduleData alertScheduleData;

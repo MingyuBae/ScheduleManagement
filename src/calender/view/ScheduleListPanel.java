@@ -1,4 +1,4 @@
-package kr.ac.hansung.op16.calender.view;
+package calender.view;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 
-import kr.ac.hansung.op16.calender.logic.ScheduleService;
-import kr.ac.hansung.op16.calender.model.ScheduleData;
+import calender.logic.ScheduleService;
+import calender.model.ScheduleData;
 
 
 public class ScheduleListPanel extends Panel {

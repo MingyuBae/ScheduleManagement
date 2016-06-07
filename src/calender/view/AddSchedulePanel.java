@@ -1,12 +1,12 @@
-package kr.ac.hansung.op16.calender.view;
+package calender.view;
 
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 
-import kr.ac.hansung.op16.calender.logic.ScheduleService;
-import kr.ac.hansung.op16.calender.model.ScheduleData;
+import calender.logic.ScheduleService;
+import calender.model.ScheduleData;
 
 public class AddSchedulePanel extends JPanel {
 	JPanel formPanel = new JPanel();

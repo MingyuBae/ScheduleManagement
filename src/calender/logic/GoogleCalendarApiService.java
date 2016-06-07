@@ -1,4 +1,4 @@
-package kr.ac.hansung.op16.calender.logic;
+package calender.logic;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -15,7 +15,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
 
-import kr.ac.hansung.op16.calender.model.ScheduleData;
+import calender.model.ScheduleData;
 
 import java.io.File;
 import java.io.IOException;
@@ -161,7 +161,6 @@ public class GoogleCalendarApiService {
 											.setSingleEvents(true)
 											.execute();
 			List<Event> items = events.getItems();
-			System.out.println("일정 가져옴...");
 			return items;
 		} catch (IOException e) {
 			System.err.println("데이터를 가져오는 중 오류가 발생하였습니다");
